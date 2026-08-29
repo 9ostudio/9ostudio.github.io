@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>9ostudio</title>
-  <meta name="description" content="9oと申します。ASMとCプログラマー。ひとりでゲームを作っています。">
+  <title>9ostudio — メンテナンス中</title>
+  <meta name="description" content="ただいまメンテナンス中です。">
   <meta name="theme-color" content="#000000">
+  <meta name="robots" content="noindex">
   <style>
     /* japanese web 1.0 — monochrome, single block */
 
@@ -35,20 +36,6 @@
       background-size: 220px 220px;
     }
 
-    a {
-      color: #ffffff;
-      text-decoration: underline;
-    }
-
-    a:visited {
-      color: #999999;
-    }
-
-    a:hover {
-      color: #000000;
-      background: #ffffff;
-    }
-
     .wrap {
       width: 680px;
       max-width: 100%;
@@ -60,85 +47,6 @@
     .page {
       background: #0a0a0a;
       border: 2px solid #666666;
-    }
-
-    .nav {
-      padding: 8px 12px;
-      font-size: 13px;
-      border-bottom: 1px solid #444444;
-      line-height: 1.8;
-      color: #666666;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 4px 12px;
-    }
-
-    .nav-links {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .nav a {
-      color: #cccccc;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    .nav a:visited {
-      color: #cccccc;
-    }
-
-    .nav a:hover {
-      color: #000000;
-      background: #ffffff;
-      text-decoration: none;
-    }
-
-    .nav .sep {
-      margin: 0 4px;
-      color: #555555;
-    }
-
-    .nav .here,
-    .nav a.here,
-    .nav a.here:visited {
-      color: #ffffff;
-      font-weight: bold;
-    }
-
-    .lang {
-      font-size: 12px;
-      white-space: nowrap;
-      margin-left: auto;
-      line-height: 1.8;
-    }
-
-    .lang a {
-      color: #888888;
-      text-decoration: none;
-      padding: 0 2px;
-    }
-
-    .lang a:visited { color: #888888; }
-
-    .lang a.on,
-    .lang a.on:visited {
-      color: #ffffff;
-      font-weight: bold;
-    }
-
-    .lang a:hover {
-      color: #000000;
-      background: #ffffff;
-      text-decoration: none;
-    }
-
-    .lang .sep {
-      margin: 0 2px;
-      color: #555555;
     }
 
     .masthead {
@@ -175,59 +83,24 @@
       color: #aaaaaa;
     }
 
-    .profile {
-      padding: 10px 12px 12px;
+    .body {
+      padding: 16px 12px;
+    }
+
+    .body p {
+      margin: 0 0 10px;
+    }
+
+    .body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .en {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dotted #333333;
+      color: #999999;
       font-size: 13px;
-    }
-
-    .profile table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .profile th {
-      text-align: left;
-      width: 5em;
-      color: #888888;
-      font-weight: normal;
-      padding: 2px 8px 2px 0;
-      vertical-align: top;
-      white-space: nowrap;
-    }
-
-    .profile td {
-      color: #dddddd;
-      padding: 2px 0;
-    }
-
-    .linkbox {
-      padding: 8px 12px 12px;
-      font-size: 13px;
-    }
-
-    .linkbox .group {
-      margin: 6px 0 2px;
-      color: #aaaaaa;
-      font-size: 12px;
-    }
-
-    .linkbox ul {
-      list-style: none;
-      margin: 0 0 8px;
-      padding: 0;
-    }
-
-    .linkbox li {
-      padding: 2px 0;
-      border-bottom: 1px dotted #333333;
-    }
-
-    .linkbox li:last-child {
-      border-bottom: none;
-    }
-
-    .linkbox .arrow {
-      color: #666666;
     }
 
     .footer {
@@ -243,12 +116,6 @@
       margin-top: 4px;
       color: #555555;
     }
-
-    @media (max-width: 700px) {
-      .wrap {
-        width: 100%;
-      }
-    }
   </style>
 </head>
 <body>
@@ -256,80 +123,30 @@
   <div class="wrap">
     <div class="page">
 
-      <nav class="nav" aria-label="メニュー">
-        <div class="nav-links">
-          <a href="index.html" class="here" data-i18n="nav.top">トップ</a><span class="sep">|</span>
-          <a href="news.html" data-i18n="nav.news">ニュース</a><span class="sep">|</span>
-          <a href="work.html" data-i18n="nav.work">作品</a><span class="sep">|</span>
-          <a href="vod.html" data-i18n="nav.vod">VOD</a><span class="sep">|</span>
-          <a href="live.html" data-i18n="nav.live">LIVE</a><span class="sep">|</span>
-          <a href="git.html" data-i18n="nav.git">Git</a><span class="sep">|</span>
-          <a href="forum.html" data-i18n="nav.forum">掲示板</a>
-        </div>
-        <div class="lang" aria-label="Language">
-          <a href="#" data-lang="ja">JP</a><span class="sep">/</span><a href="#" data-lang="en">EN</a>
-        </div>
-      </nav>
-
       <div class="masthead">
         <h1>9ostudio</h1>
-        <p class="desc" data-i18n="index.desc">ASM / C · ひとり開発 · 更新は気まぐれです</p>
+        <p class="desc">ASM / C · ひとり開発</p>
       </div>
 
-      <h2 class="sect" id="profile"><span class="mark">■</span> <span data-i18n="index.profile">プロフィール</span></h2>
-      <div class="profile">
-        <table>
-          <tr>
-            <th data-i18n="index.name">なまえ</th>
-            <td>9o（きゅうおー）</td>
-          </tr>
-          <tr>
-            <th data-i18n="index.job">しごと</th>
-            <td data-i18n="index.job.val">ASM / C プログラマー　／　インディーゲーム</td>
-          </tr>
-          <tr>
-            <th data-i18n="index.blurb">ひとこと</th>
-            <td data-i18n="index.blurb.val">ひとりでちまちま作っています。連絡は各SNSまで。</td>
-          </tr>
-          <tr>
-            <th data-i18n="index.likes">すき</th>
-            <td data-i18n="index.likes.val">低レベル、古いハード、夜更かし</td>
-          </tr>
-        </table>
-      </div>
+      <h2 class="sect"><span class="mark">■</span> メンテナンス中</h2>
 
-      <h2 class="sect" id="links"><span class="mark">■</span> <span data-i18n="index.links">リンク集</span></h2>
-      <div class="linkbox">
-        <div class="group" data-i18n="index.social">【 ソーシャル 】</div>
-        <ul>
-          <li><span class="arrow">→</span> <a href="https://x.com/9ostudio" target="_blank" rel="noopener noreferrer">X (Twitter)</a> <span data-i18n="index.x">… つぶやき</span></li>
-          <li><span class="arrow">→</span> <a href="https://github.com/9ostudio" target="_blank" rel="noopener noreferrer">GitHub</a> <span data-i18n="index.gh">… ソースとか</span></li>
-          <li><span class="arrow">→</span> <a href="https://discord.gg/9ostudio" target="_blank" rel="noopener noreferrer">Discord</a> <span data-i18n="index.dc">… 雑談所</span></li>
-        </ul>
+      <div class="body">
+        <p>ただいまサイトの更新作業をしています。</p>
+        <p>もうしばらくお待ちください。</p>
 
-        <div class="group" data-i18n="index.support">【 応援する 】</div>
-        <ul>
-          <li><span class="arrow">→</span> <a href="https://www.patreon.com/9ostudio" target="_blank" rel="noopener noreferrer">Patreon</a></li>
-          <li><span class="arrow">→</span> <a href="https://github.com/sponsors/9ostudio" target="_blank" rel="noopener noreferrer">GitHub Sponsors</a></li>
-        </ul>
-
-        <div class="group" data-i18n="index.games">【 ゲーム 】</div>
-        <ul>
-          <li><span class="arrow">→</span> <a href="https://9ostudio.itch.io" target="_blank" rel="noopener noreferrer">itch.io</a></li>
-          <li><span class="arrow">→</span> <a href="https://gamejolt.com/@9ostudio" target="_blank" rel="noopener noreferrer">Game Jolt</a></li>
-          <li><span class="arrow">→</span> <a href="https://store.steampowered.com/developer/9ostudio" target="_blank" rel="noopener noreferrer">Steam</a></li>
-        </ul>
+        <div class="en">
+          <p>The site is temporarily down for maintenance.</p>
+          <p>Please check back a little later.</p>
+        </div>
       </div>
 
       <div class="footer">
-        <div data-i18n="index.footer1">◆ リンクフリーです ◆ 相互リンク歓迎 ◆</div>
-        <div style="margin-top:4px;">© 9ostudio</div>
-        <div class="quiet" data-i18n="index.footer2">このページはひとりでコツコツ更新しています</div>
+        9ostudio
+        <div class="quiet">ASM / C</div>
       </div>
 
     </div>
   </div>
 
-  <script src="js/i18n.js"></script>
 </body>
 </html>
