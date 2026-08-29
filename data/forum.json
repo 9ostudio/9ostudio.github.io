@@ -1,0 +1,43 @@
+{
+  "boards": [
+    {
+      "id": "general",
+      "name": { "ja": "雑談", "en": "General" },
+      "desc": { "ja": "なんでもどうぞ", "en": "Anything goes" }
+    },
+    {
+      "id": "dev",
+      "name": { "ja": "開発", "en": "Dev" },
+      "desc": { "ja": "コード・ツール・低レベル", "en": "Code, tools, low-level" }
+    },
+    {
+      "id": "games",
+      "name": { "ja": "ゲーム", "en": "Games" },
+      "desc": { "ja": "インディー・自作・プレイ記録", "en": "Indie, wip, play logs" }
+    },
+    {
+      "id": "qna",
+      "name": { "ja": "質問", "en": "Q&A" },
+      "desc": { "ja": "聞きたいこと", "en": "Ask anything" }
+    }
+  ],
+  "threads": [
+    {
+      "id": "seed_welcome",
+      "boardId": "general",
+      "title": "掲示板へようこそ / Welcome",
+      "sticky": true,
+      "closed": false,
+      "createdAt": 0,
+      "bumpedAt": 0,
+      "posts": [
+        {
+          "id": "seed_welcome_1",
+          "name": "9o",
+          "body": "簡易掲示板です。書き込みはこのブラウザに保存されます（他の人の画面とは共有されません）。\n\nThis is a lightweight BBS. Posts are stored in your browser only (not shared with other visitors).",
+          "createdAt": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>9ostudio - Git</title>
+  <meta name="description" content="9ostudio 純正 git リポジトリブラウザ (isomorphic-git)">
+  <meta name="theme-color" content="#000000">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: #cccccc;
+      font-family: "MS PGothic", "MS Gothic", "Hiragino Kaku Gothic ProN", "Osaka", "Yu Gothic", sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      background: #000000;
+    }
+
+    body {
+      background-color: #000000;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 30% 65%, #aaa 50%, transparent 51%),
+        radial-gradient(1px 1px at 55% 15%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 70% 80%, #888 50%, transparent 51%),
+        radial-gradient(1px 1px at 85% 40%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 15% 90%, #aaa 50%, transparent 51%),
+        radial-gradient(1px 1px at 45% 45%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 92% 70%, #888 50%, transparent 51%),
+        radial-gradient(1px 1px at 5% 50%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 60% 95%, #aaa 50%, transparent 51%);
+      background-size: 220px 220px;
+    }
+
+    a {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    a:visited { color: #999999; }
+    a:hover { color: #000000; background: #ffffff; }
+
+    .wrap {
+      width: 680px;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 16px 8px 28px;
+      box-sizing: border-box;
+    }
+
+    .page {
+      background: #0a0a0a;
+      border: 2px solid #666666;
+    }
+
+    .nav {
+      padding: 8px 12px;
+      font-size: 13px;
+      border-bottom: 1px solid #444444;
+      line-height: 1.8;
+      color: #666666;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px 12px;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav a {
+      color: #cccccc;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav a:visited { color: #cccccc; }
+    .nav a:hover { color: #000000; background: #ffffff; text-decoration: none; }
+    .nav .sep { margin: 0 4px; color: #555555; }
+    .nav .here { color: #ffffff; font-weight: bold; }
+
+    .lang {
+      font-size: 12px;
+      white-space: nowrap;
+      margin-left: auto;
+      line-height: 1.8;
+    }
+
+    .lang a {
+      color: #888888;
+      text-decoration: none;
+      padding: 0 2px;
+    }
+
+    .lang a:visited { color: #888888; }
+
+    .lang a.on,
+    .lang a.on:visited {
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .lang a:hover {
+      color: #000000;
+      background: #ffffff;
+      text-decoration: none;
+    }
+
+    .lang .sep {
+      margin: 0 2px;
+      color: #555555;
+    }
+
+    .masthead {
+      background: #1a1a1a;
+      border-bottom: 1px solid #555555;
+      padding: 10px 12px;
+    }
+
+    .masthead h1 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .masthead .desc {
+      margin: 3px 0 0;
+      font-size: 12px;
+      color: #888888;
+    }
+
+    .sect {
+      margin: 0;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #ffffff;
+      background: #222222;
+      border-top: 1px solid #444444;
+      border-bottom: 1px solid #444444;
+    }
+
+    .sect .mark { color: #aaaaaa; }
+
+    .toolbar {
+      padding: 8px 10px;
+      border-bottom: 1px solid #333333;
+      background: #0f0f0f;
+      font-size: 12px;
+    }
+
+    .toolbar-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 8px;
+      margin-bottom: 6px;
+    }
+
+    .toolbar-row:last-child { margin-bottom: 0; }
+
+    .toolbar label {
+      color: #888888;
+      white-space: nowrap;
+    }
+
+    .toolbar select,
+    .toolbar input[type="text"] {
+      background: #000000;
+      border: 1px solid #555555;
+      color: #eeeeee;
+      font: inherit;
+      font-size: 12px;
+      padding: 3px 6px;
+      max-width: 100%;
+    }
+
+    .toolbar select {
+      min-width: 10em;
+      flex: 1;
+    }
+
+    .toolbar input[type="text"].url {
+      flex: 1;
+      min-width: 12em;
+      font-family: "MS Gothic", "Courier New", monospace;
+    }
+
+    .toolbar select:focus,
+    .toolbar input:focus {
+      outline: 1px solid #888888;
+      border-color: #888888;
+    }
+
+    .toolbar button,
+    .btn {
+      background: #333333;
+      border: 2px outset #888888;
+      color: #ffffff;
+      font: inherit;
+      font-size: 12px;
+      padding: 2px 10px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .toolbar button:hover,
+    .btn:hover {
+      background: #ffffff;
+      color: #000000;
+      border-color: #cccccc;
+    }
+
+    .toolbar button:active,
+    .btn:active {
+      border-style: inset;
+    }
+
+    .toolbar button:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    .repo-meta {
+      font-size: 11px;
+      color: #777777;
+      line-height: 1.5;
+      width: 100%;
+    }
+
+    .crumb {
+      padding: 6px 10px;
+      font-size: 12px;
+      font-family: "MS Gothic", "Courier New", monospace;
+      border-bottom: 1px solid #333333;
+      background: #111111;
+      word-break: break-all;
+      color: #888888;
+    }
+
+    .crumb a {
+      color: #cccccc;
+      text-decoration: none;
+    }
+
+    .crumb a:hover {
+      color: #000000;
+      background: #ffffff;
+    }
+
+    .crumb .sep { color: #555555; margin: 0 2px; }
+    .crumb .here { color: #ffffff; }
+
+    .status-bar {
+      padding: 4px 10px;
+      font-size: 11px;
+      color: #777777;
+      border-bottom: 1px solid #333333;
+      background: #0a0a0a;
+      min-height: 1.4em;
+      white-space: pre-wrap;
+    }
+
+    .status-bar.err { color: #cccccc; }
+
+    .files {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      font-family: "MS Gothic", "Courier New", monospace;
+    }
+
+    .files th {
+      text-align: left;
+      padding: 4px 8px;
+      background: #1a1a1a;
+      color: #888888;
+      font-weight: normal;
+      border-bottom: 1px solid #444444;
+    }
+
+    .files td {
+      padding: 4px 8px;
+      border-bottom: 1px dotted #2a2a2a;
+      vertical-align: middle;
+    }
+
+    .files tr:hover td { background: #141414; }
+
+    .files a {
+      color: #eeeeee;
+      text-decoration: none;
+    }
+
+    .files a:hover {
+      color: #000000;
+      background: #ffffff;
+    }
+
+    .files .ico {
+      color: #777777;
+      width: 1.6em;
+      white-space: nowrap;
+    }
+
+    .files .size {
+      color: #666666;
+      text-align: right;
+      white-space: nowrap;
+      width: 5.5em;
+    }
+
+    .files .type {
+      color: #666666;
+      width: 3.5em;
+    }
+
+    .files .empty {
+      padding: 12px;
+      color: #666666;
+      text-align: center;
+      font-family: "MS PGothic", "MS Gothic", sans-serif;
+    }
+
+    .file-head {
+      padding: 6px 10px;
+      font-size: 12px;
+      border-bottom: 1px solid #333333;
+      background: #111111;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 12px;
+      justify-content: space-between;
+    }
+
+    .file-head .path {
+      font-family: "MS Gothic", "Courier New", monospace;
+      color: #cccccc;
+      word-break: break-all;
+    }
+
+    .file-head .meta {
+      color: #666666;
+      font-size: 11px;
+    }
+
+    .file-actions {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .code-wrap {
+      max-height: 420px;
+      overflow: auto;
+      background: #000000;
+      border-bottom: 1px solid #333333;
+    }
+
+    .code-wrap pre {
+      margin: 0;
+      padding: 8px 10px;
+      font-family: "MS Gothic", "Courier New", monospace;
+      font-size: 11px;
+      line-height: 1.45;
+      color: #cccccc;
+      white-space: pre;
+      tab-size: 4;
+    }
+
+    .code-wrap .msg {
+      padding: 16px;
+      text-align: center;
+      color: #777777;
+      font-size: 12px;
+    }
+
+    .hidden { display: none !important; }
+
+    .note {
+      padding: 6px 12px 8px;
+      margin: 0;
+      font-size: 11px;
+      color: #666666;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #666666;
+      border-top: 1px solid #444444;
+      padding: 10px 8px;
+      background: #111111;
+    }
+
+    .footer .quiet {
+      margin-top: 4px;
+      color: #555555;
+    }
+
+    @media (max-width: 700px) {
+      .wrap { width: 100%; }
+      .files .size { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <div class="page">
+
+      <nav class="nav" aria-label="メニュー">
+        <div class="nav-links">
+          <a href="index.html" data-i18n="nav.top">トップ</a>
+          <span class="sep">|</span>
+          <a href="news.html" data-i18n="nav.news">ニュース</a>
+          <span class="sep">|</span>
+          <a href="work.html" data-i18n="nav.work">作品</a>
+          <span class="sep">|</span>
+          <a href="vod.html" data-i18n="nav.vod">VOD</a>
+          <span class="sep">|</span>
+          <a href="live.html" data-i18n="nav.live">LIVE</a>
+          <span class="sep">|</span>
+          <span class="here" data-i18n="nav.git">Git</span><span class="sep">|</span>
+          <a href="forum.html" data-i18n="nav.forum">掲示板</a>
+        </div>
+        <div class="lang" aria-label="Language">
+          <a href="#" data-lang="ja">JP</a><span class="sep">/</span><a href="#" data-lang="en">EN</a>
+        </div>
+      </nav>
+
+      <div class="masthead">
+        <h1 data-i18n="git.title">9ostudio Git</h1>
+        <p class="desc" data-i18n="git.desc">pure git · isomorphic-git（clone / branch / ls / cat）</p>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar-row">
+          <label for="repo-select">repo:</label>
+          <select id="repo-select" aria-label="リポジトリ選択"></select>
+        </div>
+        <div class="toolbar-row">
+          <label for="repo-url">url:</label>
+          <input class="url" type="text" id="repo-url" spellcheck="false"
+            placeholder="https://github.com/9ostudio/….git  または  9ostudio/repo">
+          <button type="button" id="btn-clone">clone</button>
+          <button type="button" id="btn-fetch" disabled>fetch</button>
+        </div>
+        <div class="toolbar-row">
+          <label for="branch-select">branch:</label>
+          <select id="branch-select" aria-label="ブランチ選択" disabled>
+            <option value="">—</option>
+          </select>
+          <button type="button" id="btn-checkout" disabled>checkout</button>
+          <button type="button" id="btn-log" disabled>log</button>
+        </div>
+        <div class="repo-meta" id="repo-meta">リポジトリを選ぶか URL を入れて clone してください。</div>
+      </div>
+
+      <div class="crumb" id="crumb">git</div>
+      <div class="status-bar" id="status">ready</div>
+
+      <div id="panel-list">
+        <h2 class="sect"><span class="mark">■</span> <span data-i18n="git.files">ファイル一覧</span></h2>
+        <table class="files">
+          <thead>
+            <tr>
+              <th class="ico"></th>
+              <th>name</th>
+              <th class="type">type</th>
+              <th class="size">size</th>
+            </tr>
+          </thead>
+          <tbody id="file-body">
+            <tr><td class="empty" colspan="4">clone 後に一覧が出ます</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="panel-file" class="hidden">
+        <h2 class="sect"><span class="mark">■</span> <span data-i18n="git.file">ファイル</span></h2>
+        <div class="file-head">
+          <div>
+            <div class="path" id="file-path">—</div>
+            <div class="meta" id="file-meta"></div>
+          </div>
+          <div class="file-actions">
+            <button type="button" class="btn" id="btn-back" data-i18n="git.back">← 戻る</button>
+          </div>
+        </div>
+        <div class="code-wrap" id="code-wrap">
+          <pre id="code-view"></pre>
+        </div>
+      </div>
+
+      <div id="panel-log" class="hidden">
+        <h2 class="sect"><span class="mark">■</span> <span data-i18n="git.log">git log</span></h2>
+        <div class="code-wrap" id="log-wrap">
+          <pre id="log-view"></pre>
+        </div>
+        <div class="file-head">
+          <div class="file-actions">
+            <button type="button" class="btn" id="btn-log-close" data-i18n="git.logclose">← ファイル一覧へ</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="note" data-i18n="git.note">
+        ※ GitHub REST API は使いません。ブラウザ上の isomorphic-git で clone / fetch / checkout / log します。GitHub など CORS のないホストへは git 用 CORS プロキシ経由になります。
+      </p>
+
+      <div class="footer">
+        <div>© 9ostudio</div>
+        <div class="quiet" data-i18n="footer.solo">このページはひとりでコツコツ更新しています</div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/site-data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script type="module">
+    import git from "https://esm.sh/isomorphic-git@1.27.1";
+    import http from "https://esm.sh/isomorphic-git@1.27.1/http/web/index.js";
+    import LightningFS from "https://esm.sh/@isomorphic-git/lightning-fs@4.6.0";
+
+    /* repos come from admin / data/site.json via SiteData */
+    var KNOWN_REPOS = [];
+
+    var CORS_PROXY = "https://cors.isomorphic-git.org";
+    var MAX_TEXT = 400 * 1024;
+    var DIR = "/repo";
+
+    var fs = new LightningFS("9ostudio-git-v1");
+    var pfs = fs.promises;
+
+    var repoSelect = document.getElementById("repo-select");
+    var repoUrl = document.getElementById("repo-url");
+    var branchSelect = document.getElementById("branch-select");
+    var repoMeta = document.getElementById("repo-meta");
+    var crumb = document.getElementById("crumb");
+    var statusEl = document.getElementById("status");
+    var fileBody = document.getElementById("file-body");
+    var panelList = document.getElementById("panel-list");
+    var panelFile = document.getElementById("panel-file");
+    var panelLog = document.getElementById("panel-log");
+    var codeWrap = document.getElementById("code-wrap");
+    var filePathEl = document.getElementById("file-path");
+    var fileMetaEl = document.getElementById("file-meta");
+
+    var btnClone = document.getElementById("btn-clone");
+    var btnFetch = document.getElementById("btn-fetch");
+    var btnCheckout = document.getElementById("btn-checkout");
+    var btnLog = document.getElementById("btn-log");
+
+    var state = {
+      url: "",
+      name: "",
+      branch: "",
+      path: "",
+      ready: false
+    };
+
+    function setStatus(msg, isErr) {
+      statusEl.textContent = msg || "";
+      statusEl.className = "status-bar" + (isErr ? " err" : "");
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function formatSize(n) {
+      if (n == null || isNaN(n)) return "—";
+      if (n < 1024) return n + " B";
+      if (n < 1024 * 1024) return (n / 1024).toFixed(1) + " K";
+      return (n / (1024 * 1024)).toFixed(1) + " M";
+    }
+
+    function normalizeUrl(input) {
+      var s = (input || "").trim();
+      if (!s) return "";
+      if (/^https?:\/\//i.test(s) || /^git@/i.test(s)) return s;
+      // owner/repo shorthand -> https github
+      if (/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(s)) {
+        return "https://github.com/" + s.replace(/\.git$/, "") + ".git";
+      }
+      return s;
+    }
+
+    function repoNameFromUrl(url) {
+      try {
+        var u = url.replace(/\.git$/, "").replace(/\/$/, "");
+        var parts = u.split("/");
+        return parts[parts.length - 1] || "repo";
+      } catch (e) {
+        return "repo";
+      }
+    }
+
+    function needsCorsProxy(url) {
+      // browsers cannot talk to most git hosts without CORS headers
+      try {
+        var host = new URL(url).hostname;
+        if (host === "localhost" || host === "127.0.0.1") return false;
+      } catch (e) {}
+      return true;
+    }
+
+    function gitOpts(extra) {
+      var o = Object.assign({
+        fs: fs,
+        dir: DIR,
+        http: http
+      }, extra || {});
+      if (state.url && needsCorsProxy(state.url)) {
+        o.corsProxy = CORS_PROXY;
+      }
+      return o;
+    }
+
+    async function rmrf(path) {
+      var st;
+      try {
+        st = await pfs.stat(path);
+      } catch (e) {
+        return;
+      }
+      if (st.isDirectory()) {
+        var names = await pfs.readdir(path);
+        for (var i = 0; i < names.length; i++) {
+          await rmrf(path + "/" + names[i]);
+        }
+        try { await pfs.rmdir(path); } catch (e2) {}
+      } else {
+        try { await pfs.unlink(path); } catch (e3) {}
+      }
+    }
+
+    async function ensureEmptyDir(path) {
+      await rmrf(path);
+      try {
+        await pfs.mkdir(path);
+      } catch (e) {
+        // root may already exist as empty
+        try { await pfs.mkdir("/"); } catch (e2) {}
+        await rmrf(path);
+        await pfs.mkdir(path);
+      }
+    }
+
+    function setBusy(busy) {
+      btnClone.disabled = busy;
+      btnFetch.disabled = busy || !state.ready;
+      btnCheckout.disabled = busy || !state.ready;
+      btnLog.disabled = busy || !state.ready;
+      branchSelect.disabled = busy || !state.ready;
+    }
+
+    function showList() {
+      panelList.classList.remove("hidden");
+      panelFile.classList.add("hidden");
+      panelLog.classList.add("hidden");
+    }
+
+    function showFile() {
+      panelList.classList.add("hidden");
+      panelFile.classList.remove("hidden");
+      panelLog.classList.add("hidden");
+    }
+
+    function showLog() {
+      panelList.classList.add("hidden");
+      panelFile.classList.add("hidden");
+      panelLog.classList.remove("hidden");
+    }
+
+    function renderCrumb() {
+      if (!state.ready) {
+        crumb.textContent = "git";
+        return;
+      }
+      var html = '<a href="#" data-path="">' + escapeHtml(state.name || "repo") + "</a>";
+      if (state.branch) {
+        html += ' <span class="sep">@</span> ' + escapeHtml(state.branch);
+      }
+      var parts = state.path ? state.path.split("/").filter(Boolean) : [];
+      var acc = [];
+      parts.forEach(function (p, i) {
+        acc.push(p);
+        var path = acc.join("/");
+        html += ' <span class="sep">/</span> ';
+        if (i === parts.length - 1) {
+          html += '<span class="here">' + escapeHtml(p) + "</span>";
+        } else {
+          html += '<a href="#" data-path="' + escapeHtml(path) + '">' + escapeHtml(p) + "</a>";
+        }
+      });
+      crumb.innerHTML = html;
+      Array.prototype.forEach.call(crumb.querySelectorAll("a[data-path]"), function (a) {
+        a.addEventListener("click", function (e) {
+          e.preventDefault();
+          openPath(a.getAttribute("data-path") || "");
+        });
+      });
+    }
+
+    async function refreshBranches() {
+      var locals = await git.listBranches(gitOpts());
+      var remotes = [];
+      try {
+        remotes = await git.listBranches(gitOpts({ remote: "origin" }));
+      } catch (e) {}
+
+      var set = {};
+      locals.forEach(function (b) { set[b] = "local"; });
+      remotes.forEach(function (b) {
+        if (!set[b]) set[b] = "remote";
+      });
+
+      var current = null;
+      try {
+        current = await git.currentBranch(gitOpts({ fullname: false }));
+      } catch (e) {}
+
+      branchSelect.innerHTML = "";
+      Object.keys(set).sort().forEach(function (b) {
+        var o = document.createElement("option");
+        o.value = b;
+        o.textContent = b + (set[b] === "remote" && locals.indexOf(b) < 0 ? " (remote)" : "");
+        branchSelect.appendChild(o);
+      });
+
+      if (current) {
+        state.branch = current;
+        branchSelect.value = current;
+      } else if (branchSelect.options.length) {
+        state.branch = branchSelect.value;
+      }
+    }
+
+    async function doClone(url) {
+      url = normalizeUrl(url);
+      if (!url) {
+        setStatus("URL を入力してください", true);
+        return;
+      }
+      state.url = url;
+      state.name = repoNameFromUrl(url);
+      state.path = "";
+      state.ready = false;
+      setBusy(true);
+      setStatus("git clone " + url + " …\n（初回は時間がかかることがあります）");
+      fileBody.innerHTML = '<tr><td class="empty" colspan="4">cloning…</td></tr>';
+      showList();
+
+      try {
+        await ensureEmptyDir(DIR);
+        await git.clone(gitOpts({
+          url: url,
+          singleBranch: false,
+          depth: 50,
+          onProgress: function (e) {
+            if (e.phase) {
+              var pct = e.total ? Math.round((e.loaded / e.total) * 100) : "";
+              setStatus("git clone: " + e.phase + (pct !== "" ? " " + pct + "%" : ""));
+            }
+          }
+        }));
+
+        state.ready = true;
+        await refreshBranches();
+        try {
+          var head = await git.resolveRef(gitOpts({ ref: "HEAD" }));
+          repoMeta.textContent =
+            state.name + " · " + url + "\nHEAD " + (head ? head.slice(0, 7) : "?") +
+            " · branch " + (state.branch || "?");
+        } catch (e) {
+          repoMeta.textContent = state.name + " · " + url;
+        }
+        writeHash();
+        await openPath("");
+        setStatus("clone 完了: " + state.name + (state.branch ? " @ " + state.branch : ""));
+      } catch (err) {
+        state.ready = false;
+        setStatus("clone 失敗: " + (err.message || err), true);
+        fileBody.innerHTML = '<tr><td class="empty" colspan="4">clone 失敗</td></tr>';
+        console.error(err);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function doFetch() {
+      if (!state.ready) return;
+      setBusy(true);
+      setStatus("git fetch origin …");
+      try {
+        await git.fetch(gitOpts({
+          remote: "origin",
+          singleBranch: false,
+          tags: false,
+          onProgress: function (e) {
+            if (e.phase) setStatus("git fetch: " + e.phase);
+          }
+        }));
+        await refreshBranches();
+        setStatus("fetch 完了");
+      } catch (err) {
+        setStatus("fetch 失敗: " + (err.message || err), true);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function doCheckout(branch) {
+      if (!state.ready || !branch) return;
+      setBusy(true);
+      setStatus("git checkout " + branch + " …");
+      try {
+        // create local branch tracking remote if needed
+        var locals = await git.listBranches(gitOpts());
+        if (locals.indexOf(branch) < 0) {
+          try {
+            await git.branch(gitOpts({
+              ref: branch,
+              checkout: false,
+              object: "origin/" + branch
+            }));
+          } catch (e) {
+            // try checkout with ref origin/branch
+          }
+        }
+        try {
+          await git.checkout(gitOpts({ ref: branch, force: true }));
+        } catch (e1) {
+          await git.checkout(gitOpts({ ref: "origin/" + branch, force: true }));
+          // detach or create local
+          try {
+            await git.branch(gitOpts({ ref: branch, checkout: true, force: true }));
+          } catch (e2) {
+            state.branch = branch;
+          }
+        }
+        state.branch = branch;
+        branchSelect.value = branch;
+        state.path = "";
+        writeHash();
+        await openPath("");
+        setStatus("checked out " + branch);
+      } catch (err) {
+        setStatus("checkout 失敗: " + (err.message || err), true);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function doLog() {
+      if (!state.ready) return;
+      setBusy(true);
+      setStatus("git log …");
+      try {
+        var commits = await git.log(gitOpts({ depth: 30, ref: state.branch || "HEAD" }));
+        var lines = commits.map(function (c) {
+          var d = new Date(c.commit.author.timestamp * 1000);
+          var date =
+            d.getFullYear() + "-" +
+            String(d.getMonth() + 1).padStart(2, "0") + "-" +
+            String(d.getDate()).padStart(2, "0");
+          return (
+            c.oid.slice(0, 7) + " " + date + " " +
+            c.commit.author.name + "\n  " +
+            (c.commit.message || "").split("\n")[0]
+          );
+        });
+        document.getElementById("log-view").textContent = lines.join("\n\n") || "(no commits)";
+        showLog();
+        setStatus("log: " + commits.length + " commits");
+      } catch (err) {
+        setStatus("log 失敗: " + (err.message || err), true);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function openPath(path) {
+      if (!state.ready) return;
+      state.path = path || "";
+      writeHash();
+      showList();
+      renderCrumb();
+
+      var full = DIR + (state.path ? "/" + state.path : "");
+      setStatus("ls " + (state.path || "/"));
+
+      try {
+        var st = await pfs.stat(full);
+        if (st.isFile()) {
+          await openFile(state.path);
+          return;
+        }
+
+        var names = await pfs.readdir(full);
+        names = names.filter(function (n) { return n !== ".git"; });
+        names.sort(function (a, b) { return a.localeCompare(b); });
+
+        var entries = [];
+        for (var i = 0; i < names.length; i++) {
+          var n = names[i];
+          var p = (state.path ? state.path + "/" : "") + n;
+          var s = await pfs.stat(DIR + "/" + p);
+          entries.push({
+            name: n,
+            path: p,
+            type: s.isDirectory() ? "dir" : "file",
+            size: s.isDirectory() ? null : s.size
+          });
+        }
+        entries.sort(function (a, b) {
+          if (a.type !== b.type) return a.type === "dir" ? -1 : 1;
+          return a.name.localeCompare(b.name);
+        });
+        renderListing(entries);
+        setStatus(
+          entries.length + " 項目 · " +
+          state.name + (state.branch ? " @ " + state.branch : "") +
+          (state.path ? " / " + state.path : "")
+        );
+      } catch (err) {
+        fileBody.innerHTML =
+          '<tr><td class="empty" colspan="4">読み込み失敗: ' +
+          escapeHtml(err.message || String(err)) + "</td></tr>";
+        setStatus("ls 失敗: " + (err.message || err), true);
+      }
+    }
+
+    function renderListing(items) {
+      fileBody.innerHTML = "";
+      if (state.path) {
+        var parent = state.path.split("/").slice(0, -1).join("/");
+        var trUp = document.createElement("tr");
+        trUp.innerHTML =
+          '<td class="ico">[..]</td>' +
+          '<td><a href="#" data-path="' + escapeHtml(parent) + '">..</a></td>' +
+          '<td class="type">dir</td>' +
+          '<td class="size">—</td>';
+        fileBody.appendChild(trUp);
+      }
+      if (!items.length) {
+        var trE = document.createElement("tr");
+        trE.innerHTML = '<td class="empty" colspan="4">(空)</td>';
+        fileBody.appendChild(trE);
+      }
+      items.forEach(function (item) {
+        var tr = document.createElement("tr");
+        var ico = item.type === "dir" ? "[D]" : "[F]";
+        tr.innerHTML =
+          '<td class="ico">' + ico + "</td>" +
+          '<td><a href="#" data-path="' + escapeHtml(item.path) + '">' +
+          escapeHtml(item.name) + (item.type === "dir" ? "/" : "") + "</a></td>" +
+          '<td class="type">' + item.type + "</td>" +
+          '<td class="size">' + (item.type === "dir" ? "—" : formatSize(item.size)) + "</td>";
+        fileBody.appendChild(tr);
+      });
+      Array.prototype.forEach.call(fileBody.querySelectorAll("a[data-path]"), function (a) {
+        a.addEventListener("click", function (e) {
+          e.preventDefault();
+          openPath(a.getAttribute("data-path") || "");
+        });
+      });
+      renderCrumb();
+    }
+
+    function isProbablyBinary(name, bytes) {
+      if (/\.(png|jpe?g|gif|webp|ico|bmp|pdf|zip|gz|7z|rar|exe|dll|so|o|a|wasm|mp3|mp4|webm|ogg|woff2?|ttf|eot|class|pyc)$/i.test(name)) {
+        return true;
+      }
+      if (!bytes || !bytes.length) return false;
+      var n = Math.min(bytes.length, 8000);
+      for (var i = 0; i < n; i++) {
+        if (bytes[i] === 0) return true;
+      }
+      return false;
+    }
+
+    async function openFile(path) {
+      state.path = path;
+      writeHash();
+      showFile();
+      renderCrumb();
+
+      filePathEl.textContent = path;
+      codeWrap.innerHTML = '<pre id="code-view"></pre>';
+
+      try {
+        var full = DIR + "/" + path;
+        var st = await pfs.stat(full);
+        fileMetaEl.textContent = formatSize(st.size);
+
+        if (st.size > MAX_TEXT) {
+          codeWrap.innerHTML =
+            '<div class="msg">ファイルが大きすぎます（' + formatSize(st.size) + "）</div>";
+          setStatus("too large: " + path);
+          return;
+        }
+
+        var buf = await pfs.readFile(full);
+        var bytes = buf instanceof Uint8Array ? buf : new Uint8Array(buf);
+
+        if (isProbablyBinary(path, bytes)) {
+          codeWrap.innerHTML = '<div class="msg">バイナリファイルです</div>';
+          setStatus("binary: " + path);
+          return;
+        }
+
+        var text = new TextDecoder("utf-8", { fatal: false }).decode(bytes);
+        codeWrap.innerHTML = "<pre id=\"code-view\"></pre>";
+        document.getElementById("code-view").textContent = text;
+        setStatus("file: " + path);
+      } catch (err) {
+        codeWrap.innerHTML =
+          '<div class="msg">読み込み失敗: ' + escapeHtml(err.message || String(err)) + "</div>";
+        setStatus("read 失敗: " + (err.message || err), true);
+      }
+    }
+
+    function writeHash() {
+      if (!state.url && !state.name) {
+        if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+        return;
+      }
+      var h = encodeURIComponent(state.name || state.url);
+      if (state.branch) h += "@" + encodeURIComponent(state.branch);
+      if (state.path) h += "/" + state.path.split("/").map(encodeURIComponent).join("/");
+      if (location.hash !== "#" + h) history.replaceState(null, "", "#" + h);
+    }
+
+    function parseHash() {
+      var h = (location.hash || "").replace(/^#/, "");
+      if (!h) return null;
+      var branch = "";
+      var name = h;
+      var path = "";
+      var at = h.indexOf("@");
+      var slash = h.indexOf("/");
+      if (at > 0 && (slash < 0 || at < slash)) {
+        name = h.slice(0, at);
+        var rest = h.slice(at + 1);
+        var s2 = rest.indexOf("/");
+        if (s2 >= 0) {
+          branch = decodeURIComponent(rest.slice(0, s2));
+          path = rest.slice(s2 + 1).split("/").map(decodeURIComponent).join("/");
+        } else {
+          branch = decodeURIComponent(rest);
+        }
+      } else if (slash >= 0) {
+        name = h.slice(0, slash);
+        path = h.slice(slash + 1).split("/").map(decodeURIComponent).join("/");
+      }
+      return { name: decodeURIComponent(name), branch: branch, path: path };
+    }
+
+    function fillRepoSelect() {
+      repoSelect.innerHTML = "";
+      var o0 = document.createElement("option");
+      o0.value = "";
+      o0.textContent = "— 選択 / または下に URL —";
+      repoSelect.appendChild(o0);
+      KNOWN_REPOS.forEach(function (r) {
+        var o = document.createElement("option");
+        o.value = r.url;
+        o.textContent = r.name;
+        repoSelect.appendChild(o);
+      });
+    }
+
+    // events
+    repoSelect.addEventListener("change", function () {
+      if (!repoSelect.value) return;
+      repoUrl.value = repoSelect.value;
+      doClone(repoSelect.value);
+    });
+
+    btnClone.addEventListener("click", function () {
+      doClone(repoUrl.value);
+    });
+
+    repoUrl.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        doClone(repoUrl.value);
+      }
+    });
+
+    btnFetch.addEventListener("click", function () { doFetch(); });
+    btnCheckout.addEventListener("click", function () {
+      doCheckout(branchSelect.value);
+    });
+    branchSelect.addEventListener("change", function () {
+      doCheckout(branchSelect.value);
+    });
+    btnLog.addEventListener("click", function () { doLog(); });
+
+    document.getElementById("btn-back").addEventListener("click", function () {
+      var parent = state.path.split("/").slice(0, -1).join("/");
+      openPath(parent);
+    });
+    document.getElementById("btn-log-close").addEventListener("click", function () {
+      showList();
+      renderCrumb();
+    });
+
+    setBusy(false);
+
+    SiteData.load().then(function (site) {
+      KNOWN_REPOS = (site.repos || []).map(function (r) {
+        return { name: r.name, url: r.url };
+      });
+      fillRepoSelect();
+
+      // deep link: #repoName or #repoName@branch/path
+      var hash = parseHash();
+      if (hash && hash.name) {
+        var match = KNOWN_REPOS.find(function (r) {
+          return r.name === hash.name || repoNameFromUrl(r.url) === hash.name;
+        });
+        var url = match
+          ? match.url
+          : normalizeUrl(hash.name.indexOf("/") >= 0 ? hash.name : "9ostudio/" + hash.name);
+        repoUrl.value = url;
+        return doClone(url).then(function () {
+          if (!state.ready) return;
+          var chain = Promise.resolve();
+          if (hash.branch && hash.branch !== state.branch) {
+            chain = doCheckout(hash.branch);
+          }
+          return chain.then(function () {
+            if (hash.path) return openPath(hash.path);
+          });
+        });
+      }
+      setStatus("repo を選ぶか git URL を入れて clone（admin で一覧追加可）");
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,243 @@
+/* 9ostudio · monochrome web1.0 · PROJECT / GAME PAGE
+   Paste into: Edit theme → Custom CSS (each game)
+   All rules scoped under #wrapper
+*/
+
+#wrapper{
+  --bg:#000;
+  --panel:#0a0a0a;
+  --text:#ccc;
+  --muted:#888;
+  --faint:#666;
+  --line:#444;
+  --border:#666;
+  --hi:#fff;
+  --itchio_link_color:#ffffff;
+  --itchio_button_color:#333333;
+  --itchio_button_fg_color:#ffffff;
+  --itchio_button_hover_color:#ffffff;
+  --itchio_button_border_color:#888888;
+  --itchio_border_color:#666666;
+  --itchio_border_radius:0px;
+  color:var(--text)!important;
+  background-color:var(--bg)!important;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%,#fff 50%,transparent 51%),
+    radial-gradient(1px 1px at 30% 65%,#aaa 50%,transparent 51%),
+    radial-gradient(1px 1px at 55% 15%,#fff 50%,transparent 51%),
+    radial-gradient(1px 1px at 70% 80%,#888 50%,transparent 51%),
+    radial-gradient(1px 1px at 85% 40%,#fff 50%,transparent 51%),
+    radial-gradient(1px 1px at 15% 90%,#aaa 50%,transparent 51%),
+    radial-gradient(1px 1px at 45% 45%,#fff 50%,transparent 51%),
+    radial-gradient(1px 1px at 92% 70%,#888 50%,transparent 51%)!important;
+  background-size:220px 220px!important;
+  font-family:"MS PGothic","MS Gothic","Hiragino Kaku Gothic ProN","Osaka","Yu Gothic",sans-serif!important;
+}
+
+#wrapper a{color:var(--hi)!important}
+#wrapper a:visited{color:#999!important}
+#wrapper a:hover{color:#000!important;background:var(--hi)!important}
+
+/* layout shell */
+#wrapper #inner_column{
+  max-width:960px;
+}
+
+#wrapper .header{
+  background:var(--panel)!important;
+  border:2px solid var(--border)!important;
+  border-bottom:1px solid var(--line)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  padding:12px!important;
+  margin-bottom:12px!important;
+}
+
+#wrapper .header h1{
+  color:var(--hi)!important;
+  font-weight:bold!important;
+  letter-spacing:.06em;
+  text-shadow:none!important;
+  font-size:20px!important;
+}
+
+#wrapper .header img{
+  border:1px solid var(--line)!important;
+  border-radius:0!important;
+}
+
+/* columns / description */
+#wrapper .columns,
+#wrapper .left_col,
+#wrapper .right_col{
+  background:transparent!important;
+}
+
+#wrapper .formatted_description,
+#wrapper .user_formatted,
+#wrapper .info_panel,
+#wrapper .upload_list_widget,
+#wrapper .more_information_toggle,
+#wrapper .screenshot_list,
+#wrapper .right_col .screenshot_list{
+  background:var(--panel)!important;
+  border:2px solid var(--border)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  color:var(--text)!important;
+  padding:12px!important;
+}
+
+#wrapper .formatted_description h1,
+#wrapper .formatted_description h2,
+#wrapper .formatted_description h3,
+#wrapper .user_formatted h2,
+#wrapper .user_formatted h3{
+  background:#222!important;
+  color:var(--hi)!important;
+  border-left:6px solid var(--hi)!important;
+  border-top:1px solid var(--line)!important;
+  border-bottom:1px solid var(--line)!important;
+  border-radius:0!important;
+  font-size:13px!important;
+  font-weight:bold!important;
+  padding:4px 10px!important;
+  margin:14px 0 8px!important;
+}
+
+#wrapper .formatted_description p,
+#wrapper .user_formatted p,
+#wrapper .formatted_description li{
+  color:var(--text)!important;
+  line-height:1.65;
+}
+
+#wrapper .formatted_description code,
+#wrapper .user_formatted code{
+  background:#000!important;
+  border:1px solid var(--line)!important;
+  color:#eee!important;
+  border-radius:0!important;
+}
+
+/* screenshots */
+#wrapper .screenshot_list a,
+#wrapper .screenshot_list img{
+  border:1px solid var(--line)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+
+#wrapper .screenshot_list a:hover{
+  border-color:var(--hi)!important;
+}
+
+/* buy / download */
+#wrapper .buy_row,
+#wrapper .upload_list_widget,
+#wrapper .info_table_wrapper{
+  background:var(--panel)!important;
+  border:2px solid var(--border)!important;
+  border-radius:0!important;
+}
+
+#wrapper .button,
+#wrapper .buy_btn,
+#wrapper .download_btn,
+#wrapper a.button,
+#wrapper button{
+  background:#333!important;
+  color:var(--hi)!important;
+  border:2px outset #888!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+  font-family:inherit!important;
+  text-transform:none!important;
+}
+
+#wrapper .button:hover,
+#wrapper .buy_btn:hover,
+#wrapper a.button:hover{
+  background:var(--hi)!important;
+  color:#000!important;
+  border-color:#ccc!important;
+}
+
+#wrapper .price_value,
+#wrapper .base_price{
+  color:var(--hi)!important;
+  font-family:"MS Gothic","Courier New",monospace!important;
+}
+
+/* embed / play */
+#wrapper .embed_wrapper,
+#wrapper .game_frame{
+  border:2px solid var(--border)!important;
+  border-radius:0!important;
+  background:#000!important;
+  box-shadow:none!important;
+}
+
+/* meta table */
+#wrapper .game_info_panel_widget,
+#wrapper .info_panel_wrapper,
+#wrapper table{
+  background:#0a0a0a!important;
+  border:1px solid var(--line)!important;
+  color:var(--text)!important;
+  border-radius:0!important;
+}
+
+#wrapper table td,
+#wrapper table th{
+  border-color:var(--line)!important;
+  color:var(--text)!important;
+}
+
+#wrapper .game_info_panel_widget .label,
+#wrapper .info_panel .label{
+  color:var(--muted)!important;
+}
+
+/* tabs / comments if present */
+#wrapper .tabbed_page_widget .tab,
+#wrapper .community_post{
+  background:#111!important;
+  border:1px solid var(--line)!important;
+  border-radius:0!important;
+  color:var(--text)!important;
+}
+
+#wrapper .tabbed_page_widget .tab.selected{
+  background:#222!important;
+  border-bottom-color:#fff!important;
+  color:var(--hi)!important;
+}
+
+/* footer — do not hide links */
+#wrapper .footer{
+  background:#111!important;
+  border-top:1px solid var(--line)!important;
+  color:var(--faint)!important;
+  margin-top:16px!important;
+}
+
+/* optional custom blocks in description HTML */
+#wrapper .custom-9o-box{
+  background:#000;
+  border:1px dashed var(--border);
+  padding:10px 12px;
+  margin:10px 0;
+}
+#wrapper .custom-9o-nav{
+  font-size:12px;
+  color:var(--muted);
+  border-bottom:1px solid var(--line);
+  margin-bottom:8px;
+  padding-bottom:4px;
+}
+
+@media (max-width:700px){
+  #wrapper .header h1{font-size:18px!important}
+}

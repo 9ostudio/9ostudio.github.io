@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>9ostudio - LIVE</title>
+  <meta name="description" content="9ostudio ライブ配信 + チャット">
+  <meta name="theme-color" content="#000000">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: #cccccc;
+      font-family: "MS PGothic", "MS Gothic", "Hiragino Kaku Gothic ProN", "Osaka", "Yu Gothic", sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      background: #000000;
+    }
+
+    body {
+      background-color: #000000;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 30% 65%, #aaa 50%, transparent 51%),
+        radial-gradient(1px 1px at 55% 15%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 70% 80%, #888 50%, transparent 51%),
+        radial-gradient(1px 1px at 85% 40%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 15% 90%, #aaa 50%, transparent 51%),
+        radial-gradient(1px 1px at 45% 45%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 92% 70%, #888 50%, transparent 51%),
+        radial-gradient(1px 1px at 5% 50%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 60% 95%, #aaa 50%, transparent 51%);
+      background-size: 220px 220px;
+    }
+
+    a {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    a:visited { color: #999999; }
+    a:hover { color: #000000; background: #ffffff; }
+
+    .wrap {
+      width: 680px;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 16px 8px 28px;
+      box-sizing: border-box;
+    }
+
+    .page {
+      background: #0a0a0a;
+      border: 2px solid #666666;
+    }
+
+    .nav {
+      padding: 8px 12px;
+      font-size: 13px;
+      border-bottom: 1px solid #444444;
+      line-height: 1.8;
+      color: #666666;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px 12px;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav a {
+      color: #cccccc;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav a:visited { color: #cccccc; }
+    .nav a:hover { color: #000000; background: #ffffff; text-decoration: none; }
+    .nav .sep { margin: 0 4px; color: #555555; }
+    .nav .here { color: #ffffff; font-weight: bold; }
+
+    .lang {
+      font-size: 12px;
+      white-space: nowrap;
+      margin-left: auto;
+      line-height: 1.8;
+    }
+
+    .lang a {
+      color: #888888;
+      text-decoration: none;
+      padding: 0 2px;
+    }
+
+    .lang a:visited { color: #888888; }
+
+    .lang a.on,
+    .lang a.on:visited {
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .lang a:hover {
+      color: #000000;
+      background: #ffffff;
+      text-decoration: none;
+    }
+
+    .lang .sep {
+      margin: 0 2px;
+      color: #555555;
+    }
+
+    .masthead {
+      background: #1a1a1a;
+      border-bottom: 1px solid #555555;
+      padding: 10px 12px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .masthead h1 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .masthead .desc {
+      margin: 3px 0 0;
+      font-size: 12px;
+      color: #888888;
+    }
+
+    .status {
+      font-size: 12px;
+      color: #888888;
+      white-space: nowrap;
+    }
+
+    .status .dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #444444;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+
+    .status.live .dot {
+      background: #ffffff;
+      box-shadow: 0 0 0 1px #ffffff;
+      animation: blink 1.2s step-start infinite;
+    }
+
+    .status.live {
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .status.live .dot { animation: none; }
+    }
+
+    /* video on top */
+    .player {
+      background: #000000;
+      border-bottom: 1px solid #333333;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .player video,
+    .player iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #000;
+    }
+
+    .player .placeholder {
+      text-align: center;
+      padding: 16px;
+      color: #666666;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .player .placeholder strong {
+      display: block;
+      color: #999999;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    /* chat under video */
+    .sect {
+      margin: 0;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #ffffff;
+      background: #222222;
+      border-bottom: 1px solid #444444;
+    }
+
+    .sect .mark { color: #aaaaaa; }
+
+    .chat {
+      display: flex;
+      flex-direction: column;
+      height: 260px;
+      background: #0a0a0a;
+    }
+
+    .chat-log {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 10px;
+      font-size: 12px;
+      border-bottom: 1px solid #333333;
+    }
+
+    .chat-log .msg {
+      margin: 0 0 5px;
+      word-wrap: break-word;
+      line-height: 1.45;
+    }
+
+    .chat-log .name {
+      color: #ffffff;
+      font-weight: bold;
+      margin-right: 4px;
+    }
+
+    .chat-log .sys {
+      color: #666666;
+      font-style: normal;
+    }
+
+    .chat-log .time {
+      color: #555555;
+      font-size: 11px;
+      margin-right: 4px;
+      font-family: "MS Gothic", "Courier New", monospace;
+    }
+
+    .chat-form {
+      display: flex;
+      gap: 4px;
+      padding: 6px 8px;
+      background: #111111;
+      border-top: 1px solid #333333;
+    }
+
+    .chat-form input[type="text"] {
+      flex: 1;
+      min-width: 0;
+      background: #000000;
+      border: 1px solid #555555;
+      color: #eeeeee;
+      font: inherit;
+      font-size: 12px;
+      padding: 4px 6px;
+    }
+
+    .chat-form input[type="text"]:focus {
+      outline: 1px solid #888888;
+      border-color: #888888;
+    }
+
+    .chat-form input.name {
+      flex: 0 0 5.5em;
+    }
+
+    .chat-form button {
+      background: #333333;
+      border: 2px outset #888888;
+      color: #ffffff;
+      font: inherit;
+      font-size: 12px;
+      padding: 2px 10px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .chat-form button:hover {
+      background: #ffffff;
+      color: #000000;
+      border-color: #cccccc;
+    }
+
+    .chat-form button:active {
+      border-style: inset;
+    }
+
+    .note {
+      padding: 6px 12px 8px;
+      margin: 0;
+      font-size: 11px;
+      color: #666666;
+      border-top: 1px solid #333333;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #666666;
+      border-top: 1px solid #444444;
+      padding: 10px 8px;
+      background: #111111;
+    }
+
+    .footer .quiet {
+      margin-top: 4px;
+      color: #555555;
+    }
+
+    @media (max-width: 700px) {
+      .wrap { width: 100%; }
+      .chat { height: 220px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <div class="page">
+
+      <nav class="nav" aria-label="メニュー">
+        <div class="nav-links">
+          <a href="index.html" data-i18n="nav.top">トップ</a>
+          <span class="sep">|</span>
+          <a href="news.html" data-i18n="nav.news">ニュース</a>
+          <span class="sep">|</span>
+          <a href="work.html" data-i18n="nav.work">作品</a>
+          <span class="sep">|</span>
+          <a href="vod.html" data-i18n="nav.vod">VOD</a>
+          <span class="sep">|</span>
+          <span class="here" data-i18n="nav.live">LIVE</span>
+          <span class="sep">|</span>
+          <a href="git.html" data-i18n="nav.git">Git</a><span class="sep">|</span>
+          <a href="forum.html" data-i18n="nav.forum">掲示板</a>
+        </div>
+        <div class="lang" aria-label="Language">
+          <a href="#" data-lang="ja">JP</a><span class="sep">/</span><a href="#" data-lang="en">EN</a>
+        </div>
+      </nav>
+
+      <div class="masthead">
+        <div>
+          <h1 data-i18n="live.title">9ostudio LIVE</h1>
+          <p class="desc" data-i18n="live.desc">配信 + チャット</p>
+        </div>
+        <div class="status" id="live-status"><span class="dot"></span>OFFLINE</div>
+      </div>
+
+      <!-- video on top -->
+      <div class="player" id="player">
+        <div class="placeholder">
+          <strong>■ LIVE</strong>
+          <span data-i18n="live.offline" data-i18n-html="1">いまは配信していません<br>（配信URLを設定するとここに表示されます）</span>
+        </div>
+      </div>
+
+      <!-- chat under video -->
+      <div class="sect"><span class="mark">■</span> <span data-i18n="live.chat">チャット</span></div>
+      <div class="chat">
+        <div class="chat-log" id="chat-log" aria-live="polite"></div>
+        <form class="chat-form" id="chat-form" autocomplete="off">
+          <input class="name" type="text" id="chat-name" name="name" maxlength="16" placeholder="名前" data-i18n-placeholder="live.name" aria-label="名前">
+          <input type="text" id="chat-text" name="text" maxlength="200" placeholder="メッセージ…" data-i18n-placeholder="live.msg" aria-label="メッセージ" required>
+          <button type="submit" data-i18n="live.send">送信</button>
+        </form>
+      </div>
+      <p class="note" data-i18n="live.note">※ このチャットはあなたのブラウザ内だけです（他の人には見えません）。本番用は後から接続できます。</p>
+
+      <div class="footer">
+        <div>© 9ostudio</div>
+        <div class="quiet" data-i18n="footer.solo">このページはひとりでコツコツ更新しています</div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/site-data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script>
+    var player = document.getElementById("player");
+    var statusEl = document.getElementById("live-status");
+    var log = document.getElementById("chat-log");
+    var form = document.getElementById("chat-form");
+    var nameInput = document.getElementById("chat-name");
+    var textInput = document.getElementById("chat-text");
+
+    try {
+      var savedName = localStorage.getItem("9o_chat_name");
+      if (savedName) nameInput.value = savedName;
+    } catch (e) {}
+
+    function pad(n) { return n < 10 ? "0" + n : String(n); }
+
+    function nowTime() {
+      var d = new Date();
+      return pad(d.getHours()) + ":" + pad(d.getMinutes());
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function addMsg(name, text, isSys) {
+      var row = document.createElement("div");
+      row.className = "msg" + (isSys ? " sys" : "");
+      if (isSys) {
+        row.textContent = text;
+      } else {
+        row.innerHTML =
+          '<span class="time">' + nowTime() + "</span>" +
+          '<span class="name">' + escapeHtml(name) + "</span>" +
+          escapeHtml(text);
+      }
+      log.appendChild(row);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function applyLive(LIVE_SRC, LIVE_TYPE) {
+      if (LIVE_SRC) {
+        player.innerHTML = "";
+        if (LIVE_TYPE === "video") {
+          var video = document.createElement("video");
+          video.src = LIVE_SRC;
+          video.controls = true;
+          video.autoplay = true;
+          video.muted = true;
+          video.playsInline = true;
+          player.appendChild(video);
+        } else {
+          var iframe = document.createElement("iframe");
+          iframe.src = LIVE_SRC;
+          iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+          iframe.allowFullscreen = true;
+          iframe.title = "9ostudio LIVE";
+          player.appendChild(iframe);
+        }
+        statusEl.className = "status live";
+        statusEl.innerHTML = '<span class="dot"></span>LIVE';
+      }
+      var joined = (window.I18n && I18n.t("live.joined")) || "— チャットに入りました —";
+      var off = (window.I18n && I18n.t("live.offsys")) || "（配信オフライン）";
+      addMsg("", joined, true);
+      if (!LIVE_SRC) addMsg("", off, true);
+    }
+
+    SiteData.load().then(function (data) {
+      var live = data.live || {};
+      applyLive(live.src || "", live.type || "iframe");
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var anon = (window.I18n && I18n.t("live.anon")) || "名無しさん";
+      var name = (nameInput.value || "").trim() || anon;
+      var text = (textInput.value || "").trim();
+      if (!text) return;
+      try { localStorage.setItem("9o_chat_name", name); } catch (err) {}
+      addMsg(name, text, false);
+      textInput.value = "";
+      textInput.focus();
+    });
+  </script>
+
+</body>
+</html>

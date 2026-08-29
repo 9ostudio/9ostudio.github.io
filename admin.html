@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>9ostudio - admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#000000">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: #cccccc;
+      font-family: "MS PGothic", "MS Gothic", "Hiragino Kaku Gothic ProN", "Osaka", "Yu Gothic", sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      background: #000000;
+    }
+
+    body {
+      background-color: #000000;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 55% 15%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 85% 40%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 30% 65%, #aaa 50%, transparent 51%);
+      background-size: 220px 220px;
+    }
+
+    a { color: #ffffff; }
+    a:hover { color: #000; background: #fff; }
+
+    .wrap {
+      width: 680px;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 16px 8px 28px;
+      box-sizing: border-box;
+    }
+
+    .page {
+      background: #0a0a0a;
+      border: 2px solid #666666;
+    }
+
+    .nav {
+      padding: 8px 12px;
+      font-size: 13px;
+      border-bottom: 1px solid #444444;
+      line-height: 1.8;
+      color: #666666;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px 12px;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav a {
+      color: #cccccc;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav a:hover { color: #000; background: #fff; text-decoration: none; }
+    .nav .sep { margin: 0 4px; color: #555; }
+    .nav .here { color: #fff; font-weight: bold; }
+
+    .lang {
+      font-size: 12px;
+      white-space: nowrap;
+      margin-left: auto;
+      line-height: 1.8;
+    }
+
+    .lang a {
+      color: #888888;
+      text-decoration: none;
+      padding: 0 2px;
+    }
+
+    .lang a:visited { color: #888888; }
+
+    .lang a.on,
+    .lang a.on:visited {
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .lang a:hover {
+      color: #000000;
+      background: #ffffff;
+      text-decoration: none;
+    }
+
+    .lang .sep {
+      margin: 0 2px;
+      color: #555555;
+    }
+
+    .lang .sep {
+      margin: 0 2px;
+      color: #555555;
+    }
+
+    .masthead {
+      background: #1a1a1a;
+      border-bottom: 1px solid #555;
+      padding: 10px 12px;
+    }
+
+    .masthead h1 {
+      margin: 0;
+      font-size: 16px;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .masthead .desc {
+      margin: 3px 0 0;
+      font-size: 12px;
+      color: #888;
+    }
+
+    .sect {
+      margin: 0;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #fff;
+      background: #222;
+      border-top: 1px solid #444;
+      border-bottom: 1px solid #444;
+    }
+
+    .sect .mark { color: #aaa; }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #444;
+      background: #111;
+    }
+
+    .tabs button {
+      flex: 1;
+      min-width: 4.5em;
+      background: #1a1a1a;
+      border: 0;
+      border-right: 1px solid #333;
+      border-bottom: 2px solid transparent;
+      color: #999;
+      font: inherit;
+      font-size: 12px;
+      padding: 8px 6px;
+      cursor: pointer;
+    }
+
+    .tabs button:hover { color: #fff; background: #222; }
+    .tabs button.on {
+      color: #fff;
+      background: #0a0a0a;
+      border-bottom-color: #fff;
+      font-weight: bold;
+    }
+
+    .panel { padding: 10px 12px 14px; display: none; }
+    .panel.on { display: block; }
+
+    label.field {
+      display: block;
+      margin: 0 0 8px;
+      font-size: 12px;
+      color: #888;
+    }
+
+    label.field span {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="date"],
+    input[type="url"],
+    select,
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      background: #000;
+      border: 1px solid #555;
+      color: #eee;
+      font: inherit;
+      font-size: 13px;
+      padding: 5px 6px;
+    }
+
+    textarea {
+      min-height: 72px;
+      resize: vertical;
+      font-family: "MS Gothic", "Courier New", monospace;
+      font-size: 12px;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: 1px solid #888;
+      border-color: #888;
+    }
+
+    .row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    @media (max-width: 520px) {
+      .row2 { grid-template-columns: 1fr; }
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    button.btn, .btn-row button, .login-box button {
+      background: #333;
+      border: 2px outset #888;
+      color: #fff;
+      font: inherit;
+      font-size: 12px;
+      padding: 3px 12px;
+      cursor: pointer;
+    }
+
+    button.btn:hover, .btn-row button:hover, .login-box button:hover {
+      background: #fff;
+      color: #000;
+      border-color: #ccc;
+    }
+
+    button.btn:active, .btn-row button:active {
+      border-style: inset;
+    }
+
+    button.danger:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    .list {
+      list-style: none;
+      margin: 10px 0 0;
+      padding: 0;
+      border-top: 1px solid #333;
+    }
+
+    .list li {
+      padding: 8px 0;
+      border-bottom: 1px dotted #333;
+      font-size: 12px;
+    }
+
+    .list .title {
+      color: #fff;
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    .list .meta {
+      color: #777;
+      margin-top: 2px;
+      word-break: break-all;
+    }
+
+    .list .actions {
+      margin-top: 4px;
+    }
+
+    .list .actions button {
+      margin-right: 4px;
+      background: #222;
+      border: 1px solid #555;
+      color: #ccc;
+      font: inherit;
+      font-size: 11px;
+      padding: 1px 8px;
+      cursor: pointer;
+    }
+
+    .list .actions button:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    .status {
+      padding: 6px 12px;
+      font-size: 11px;
+      color: #777;
+      border-bottom: 1px solid #333;
+      background: #0f0f0f;
+      min-height: 1.3em;
+    }
+
+    .status.ok { color: #aaa; }
+    .status.err { color: #ccc; }
+
+    .login-box {
+      padding: 20px 16px;
+    }
+
+    .login-box p {
+      margin: 0 0 10px;
+      font-size: 12px;
+      color: #888;
+    }
+
+    .note {
+      margin: 0;
+      padding: 8px 12px 10px;
+      font-size: 11px;
+      color: #666;
+      border-top: 1px solid #333;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #666;
+      border-top: 1px solid #444;
+      padding: 10px 8px;
+      background: #111;
+    }
+
+    .hidden { display: none !important; }
+
+    .bar {
+      padding: 8px 12px;
+      border-bottom: 1px solid #333;
+      background: #0f0f0f;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .bar .src {
+      font-size: 11px;
+      color: #777;
+      margin-left: auto;
+    }
+  </style>
+  <script src="js/site-data.js"></script>
+  <script src="js/i18n.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="page">
+
+      <nav class="nav" aria-label="メニュー">
+        <div class="nav-links">
+          <a href="index.html" data-i18n="nav.top">トップ</a><span class="sep">|</span>
+          <a href="news.html" data-i18n="nav.news">ニュース</a><span class="sep">|</span>
+          <a href="work.html" data-i18n="nav.work">作品</a><span class="sep">|</span>
+          <a href="vod.html" data-i18n="nav.vod">VOD</a><span class="sep">|</span>
+          <a href="live.html" data-i18n="nav.live">LIVE</a><span class="sep">|</span>
+          <a href="git.html" data-i18n="nav.git">Git</a><span class="sep">|</span>
+          <a href="forum.html" data-i18n="nav.forum">掲示板</a><span class="sep">|</span>
+          <span class="here" data-i18n="nav.admin">admin</span>
+        </div>
+        <div class="lang" aria-label="Language">
+          <a href="#" data-lang="ja">JP</a><span class="sep">/</span><a href="#" data-lang="en">EN</a>
+        </div>
+      </nav>
+
+      <div class="masthead">
+        <h1>9ostudio admin</h1>
+        <p class="desc">news · video · git repo</p>
+      </div>
+
+      <!-- login -->
+      <div id="gate">
+        <div class="login-box">
+          <p>管理パネルです。パスワードを入力してください。<br>
+            初期パスワード: <code>9ostudio</code>（下で変更可）</p>
+          <label class="field">
+            <span>password</span>
+            <input type="password" id="pw-input" autocomplete="current-password">
+          </label>
+          <div class="btn-row">
+            <button type="button" id="btn-login">ログイン</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- app -->
+      <div id="app" class="hidden">
+        <div class="status" id="status">—</div>
+
+        <div class="bar">
+          <button type="button" class="btn" id="btn-save">保存</button>
+          <button type="button" class="btn" id="btn-export">JSON出力</button>
+          <button type="button" class="btn" id="btn-import">JSON読込</button>
+          <input type="file" id="import-file" accept="application/json,.json" class="hidden">
+          <button type="button" class="btn danger" id="btn-reset">下書き破棄</button>
+          <button type="button" class="btn" id="btn-logout">ログアウト</button>
+          <span class="src" id="data-src"></span>
+        </div>
+
+        <div class="tabs" role="tablist">
+          <button type="button" class="on" data-tab="news">ニュース</button>
+          <button type="button" data-tab="vod">VOD</button>
+          <button type="button" data-tab="git">Git</button>
+          <button type="button" data-tab="live">LIVE</button>
+          <button type="button" data-tab="security">鍵</button>
+        </div>
+
+        <!-- news -->
+        <div class="panel on" id="tab-news">
+          <div class="sect"><span class="mark">■</span> ニュース追加 / 編集</div>
+          <div style="padding-top:10px">
+            <input type="hidden" id="news-id">
+            <div class="row2">
+              <label class="field"><span>日付</span><input type="text" id="news-date" placeholder="2026/07/31"></label>
+              <label class="field"><span>カテゴリ</span><input type="text" id="news-cat" placeholder="開発 / おしらせ / ひとこと"></label>
+            </div>
+            <label class="field"><span>タイトル</span><input type="text" id="news-title"></label>
+            <label class="field"><span>本文</span><textarea id="news-text"></textarea></label>
+            <div class="btn-row">
+              <button type="button" class="btn" id="news-add">追加 / 更新</button>
+              <button type="button" class="btn" id="news-clear">クリア</button>
+            </div>
+          </div>
+          <ul class="list" id="news-list"></ul>
+        </div>
+
+        <!-- vod -->
+        <div class="panel" id="tab-vod">
+          <div class="sect"><span class="mark">■</span> VOD 追加 / 編集</div>
+          <div style="padding-top:10px">
+            <input type="hidden" id="vod-id">
+            <label class="field"><span>タイトル</span><input type="text" id="vod-title"></label>
+            <div class="row2">
+              <label class="field"><span>日付</span><input type="text" id="vod-date" placeholder="2026/07/31"></label>
+              <label class="field">
+                <span>種別</span>
+                <select id="vod-type">
+                  <option value="video">video (file / mp4 url)</option>
+                  <option value="iframe">iframe (YouTube 等)</option>
+                </select>
+              </label>
+            </div>
+            <label class="field"><span>URL（任意 · iframe や直リンク）</span><input type="url" id="vod-src" placeholder="https://… または media/foo.mp4"></label>
+            <label class="field"><span>動画アップロード（このブラウザの IndexedDB に保存）</span><input type="file" id="vod-file" accept="video/*,.mp4,.webm,.ogg"></label>
+            <label class="field"><span>メモ</span><input type="text" id="vod-note" placeholder="任意"></label>
+            <div class="btn-row">
+              <button type="button" class="btn" id="vod-add">追加 / 更新</button>
+              <button type="button" class="btn" id="vod-clear">クリア</button>
+            </div>
+            <p style="margin:8px 0 0;font-size:11px;color:#666">
+              ※ アップロードした動画は訪問者には見えません（あなたのブラウザ内）。公開するならファイルをリポジトリの
+              <code>media/</code> に置き、URL に <code>media/xxx.mp4</code> を書いて JSON 出力 → コミットしてください。
+            </p>
+          </div>
+          <ul class="list" id="vod-list"></ul>
+        </div>
+
+        <!-- git -->
+        <div class="panel" id="tab-git">
+          <div class="sect"><span class="mark">■</span> Git リポジトリ追加</div>
+          <div style="padding-top:10px">
+            <input type="hidden" id="repo-id">
+            <label class="field"><span>表示名</span><input type="text" id="repo-name" placeholder="my-game"></label>
+            <label class="field"><span>git URL</span><input type="text" id="repo-url" placeholder="https://github.com/9ostudio/….git"></label>
+            <div class="btn-row">
+              <button type="button" class="btn" id="repo-add">追加 / 更新</button>
+              <button type="button" class="btn" id="repo-clear">クリア</button>
+            </div>
+          </div>
+          <ul class="list" id="repo-list"></ul>
+        </div>
+
+        <!-- live -->
+        <div class="panel" id="tab-live">
+          <div class="sect"><span class="mark">■</span> LIVE 設定</div>
+          <div style="padding-top:10px">
+            <label class="field">
+              <span>種別</span>
+              <select id="live-type">
+                <option value="iframe">iframe (YouTube / Twitch embed)</option>
+                <option value="video">video (直リンク)</option>
+              </select>
+            </label>
+            <label class="field"><span>配信 URL</span><input type="text" id="live-src" placeholder="https://www.youtube.com/embed/… 空 = オフライン"></label>
+            <div class="btn-row">
+              <button type="button" class="btn" id="live-save">LIVE を更新</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- security -->
+        <div class="panel" id="tab-security">
+          <div class="sect"><span class="mark">■</span> パスワード変更</div>
+          <div style="padding-top:10px">
+            <label class="field"><span>新しいパスワード</span><input type="password" id="pw-new" autocomplete="new-password"></label>
+            <label class="field"><span>確認</span><input type="password" id="pw-new2" autocomplete="new-password"></label>
+            <div class="btn-row">
+              <button type="button" class="btn" id="pw-change">変更</button>
+            </div>
+            <p style="margin:10px 0 0;font-size:11px;color:#666">
+              ブラウザの localStorage にハッシュを保存します。本格的な認証ではありません。
+            </p>
+          </div>
+        </div>
+
+        <p class="note">
+          【公開手順】保存 → JSON出力 → リポジトリの <code>data/site.json</code> を差し替え → git push。
+          下書きは localStorage に残り、この端末ではサイト表示に即反映されます。
+        </p>
+      </div>
+
+      <div class="footer">admin · リンク非公開推奨</div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var PW_KEY = "9o_admin_pw_v1";
+      var SESSION_KEY = "9o_admin_ok";
+      var DEFAULT_PW = "9ostudio";
+
+      var data = SiteData.normalize({});
+      var pendingFile = null; // File for vod upload
+
+      var gate = document.getElementById("gate");
+      var app = document.getElementById("app");
+      var statusEl = document.getElementById("status");
+      var dataSrc = document.getElementById("data-src");
+
+      function setStatus(msg, kind) {
+        statusEl.textContent = msg || "";
+        statusEl.className = "status" + (kind ? " " + kind : "");
+      }
+
+      function sha256(text) {
+        var enc = new TextEncoder().encode(text);
+        return crypto.subtle.digest("SHA-256", enc).then(function (buf) {
+          return Array.from(new Uint8Array(buf))
+            .map(function (b) { return b.toString(16).padStart(2, "0"); })
+            .join("");
+        });
+      }
+
+      function getStoredHash() {
+        return localStorage.getItem(PW_KEY);
+      }
+
+      async function ensureDefaultHash() {
+        if (!getStoredHash()) {
+          var h = await sha256(DEFAULT_PW);
+          localStorage.setItem(PW_KEY, h);
+        }
+      }
+
+      async function checkPassword(pw) {
+        await ensureDefaultHash();
+        var h = await sha256(pw);
+        return h === getStoredHash();
+      }
+
+      function isAuthed() {
+        return sessionStorage.getItem(SESSION_KEY) === "1";
+      }
+
+      function setAuthed(ok) {
+        if (ok) sessionStorage.setItem(SESSION_KEY, "1");
+        else sessionStorage.removeItem(SESSION_KEY);
+      }
+
+      function showApp() {
+        gate.classList.add("hidden");
+        app.classList.remove("hidden");
+        refreshAll();
+      }
+
+      function showGate() {
+        app.classList.add("hidden");
+        gate.classList.remove("hidden");
+      }
+
+      function todayStr() {
+        var d = new Date();
+        return d.getFullYear() + "/" +
+          String(d.getMonth() + 1).padStart(2, "0") + "/" +
+          String(d.getDate()).padStart(2, "0");
+      }
+
+      function escapeHtml(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      /* ---- render lists ---- */
+      function renderNews() {
+        var ul = document.getElementById("news-list");
+        ul.innerHTML = "";
+        if (!data.news.length) {
+          ul.innerHTML = '<li class="meta">（まだありません）</li>';
+          return;
+        }
+        data.news.forEach(function (n, i) {
+          var li = document.createElement("li");
+          li.innerHTML =
+            '<div class="title">' + escapeHtml(n.title || "(無題)") + "</div>" +
+            '<div class="meta">' + escapeHtml(n.date || "") + " · " + escapeHtml(n.cat || "") + "</div>" +
+            '<div class="meta">' + escapeHtml((n.text || "").slice(0, 80)) + "</div>" +
+            '<div class="actions">' +
+            '<button type="button" data-edit="' + i + '">編集</button>' +
+            '<button type="button" data-up="' + i + '">↑</button>' +
+            '<button type="button" data-down="' + i + '">↓</button>' +
+            '<button type="button" data-del="' + i + '">削除</button>' +
+            "</div>";
+          ul.appendChild(li);
+        });
+        ul.querySelectorAll("[data-edit]").forEach(function (b) {
+          b.onclick = function () {
+            var n = data.news[+b.getAttribute("data-edit")];
+            document.getElementById("news-id").value = n.id || "";
+            document.getElementById("news-date").value = n.date || "";
+            document.getElementById("news-cat").value = n.cat || "";
+            document.getElementById("news-title").value = n.title || "";
+            document.getElementById("news-text").value = n.text || "";
+          };
+        });
+        ul.querySelectorAll("[data-del]").forEach(function (b) {
+          b.onclick = function () {
+            data.news.splice(+b.getAttribute("data-del"), 1);
+            persist();
+            renderNews();
+          };
+        });
+        ul.querySelectorAll("[data-up]").forEach(function (b) {
+          b.onclick = function () {
+            var i = +b.getAttribute("data-up");
+            if (i <= 0) return;
+            var t = data.news[i - 1];
+            data.news[i - 1] = data.news[i];
+            data.news[i] = t;
+            persist();
+            renderNews();
+          };
+        });
+        ul.querySelectorAll("[data-down]").forEach(function (b) {
+          b.onclick = function () {
+            var i = +b.getAttribute("data-down");
+            if (i >= data.news.length - 1) return;
+            var t = data.news[i + 1];
+            data.news[i + 1] = data.news[i];
+            data.news[i] = t;
+            persist();
+            renderNews();
+          };
+        });
+      }
+
+      function renderVods() {
+        var ul = document.getElementById("vod-list");
+        ul.innerHTML = "";
+        if (!data.vods.length) {
+          ul.innerHTML = '<li class="meta">（まだありません）</li>';
+          return;
+        }
+        data.vods.forEach(function (v, i) {
+          var li = document.createElement("li");
+          var srcInfo = v.fileId ? ("upload:" + v.fileId) : (v.src || "—");
+          li.innerHTML =
+            '<div class="title">' + escapeHtml(v.title || "(無題)") + "</div>" +
+            '<div class="meta">' + escapeHtml(v.date || "") + " · " + escapeHtml(v.type || "video") +
+            (v.note ? " · " + escapeHtml(v.note) : "") + "</div>" +
+            '<div class="meta">' + escapeHtml(srcInfo) + "</div>" +
+            '<div class="actions">' +
+            '<button type="button" data-edit="' + i + '">編集</button>' +
+            '<button type="button" data-del="' + i + '">削除</button>' +
+            "</div>";
+          ul.appendChild(li);
+        });
+        ul.querySelectorAll("[data-edit]").forEach(function (b) {
+          b.onclick = function () {
+            var v = data.vods[+b.getAttribute("data-edit")];
+            document.getElementById("vod-id").value = v.id || "";
+            document.getElementById("vod-title").value = v.title || "";
+            document.getElementById("vod-date").value = v.date || "";
+            document.getElementById("vod-type").value = v.type || "video";
+            document.getElementById("vod-src").value = v.src || "";
+            document.getElementById("vod-note").value = v.note || "";
+            pendingFile = null;
+            document.getElementById("vod-file").value = "";
+          };
+        });
+        ul.querySelectorAll("[data-del]").forEach(function (b) {
+          b.onclick = async function () {
+            var i = +b.getAttribute("data-del");
+            var v = data.vods[i];
+            if (v && v.fileId) {
+              try { await SiteData.media.remove(v.fileId); } catch (e) {}
+            }
+            data.vods.splice(i, 1);
+            persist();
+            renderVods();
+          };
+        });
+      }
+
+      function renderRepos() {
+        var ul = document.getElementById("repo-list");
+        ul.innerHTML = "";
+        if (!data.repos.length) {
+          ul.innerHTML = '<li class="meta">（まだありません）</li>';
+          return;
+        }
+        data.repos.forEach(function (r, i) {
+          var li = document.createElement("li");
+          li.innerHTML =
+            '<div class="title">' + escapeHtml(r.name || "(無題)") + "</div>" +
+            '<div class="meta">' + escapeHtml(r.url || "") + "</div>" +
+            '<div class="actions">' +
+            '<button type="button" data-edit="' + i + '">編集</button>' +
+            '<button type="button" data-del="' + i + '">削除</button>' +
+            "</div>";
+          ul.appendChild(li);
+        });
+        ul.querySelectorAll("[data-edit]").forEach(function (b) {
+          b.onclick = function () {
+            var r = data.repos[+b.getAttribute("data-edit")];
+            document.getElementById("repo-id").value = r.id || r.name || "";
+            document.getElementById("repo-name").value = r.name || "";
+            document.getElementById("repo-url").value = r.url || "";
+          };
+        });
+        ul.querySelectorAll("[data-del]").forEach(function (b) {
+          b.onclick = function () {
+            data.repos.splice(+b.getAttribute("data-del"), 1);
+            persist();
+            renderRepos();
+          };
+        });
+      }
+
+      function renderLive() {
+        document.getElementById("live-type").value = (data.live && data.live.type) || "iframe";
+        document.getElementById("live-src").value = (data.live && data.live.src) || "";
+      }
+
+      function refreshAll() {
+        dataSrc.textContent = "source: " + SiteData.sourceLabel();
+        renderNews();
+        renderVods();
+        renderRepos();
+        renderLive();
+      }
+
+      function persist() {
+        SiteData.save(data);
+        dataSrc.textContent = "source: " + SiteData.sourceLabel();
+        setStatus("下書きを保存しました（localStorage）", "ok");
+      }
+
+      /* ---- tabs ---- */
+      document.querySelectorAll(".tabs button").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          document.querySelectorAll(".tabs button").forEach(function (b) { b.classList.remove("on"); });
+          document.querySelectorAll(".panel").forEach(function (p) { p.classList.remove("on"); });
+          btn.classList.add("on");
+          document.getElementById("tab-" + btn.getAttribute("data-tab")).classList.add("on");
+        });
+      });
+
+      /* ---- news actions ---- */
+      document.getElementById("news-add").onclick = function () {
+        var id = document.getElementById("news-id").value || SiteData.uid("n");
+        var item = {
+          id: id,
+          date: document.getElementById("news-date").value.trim() || todayStr(),
+          cat: document.getElementById("news-cat").value.trim() || "おしらせ",
+          title: document.getElementById("news-title").value.trim(),
+          text: document.getElementById("news-text").value.trim()
+        };
+        if (!item.title) {
+          setStatus("タイトルを入れてください", "err");
+          return;
+        }
+        var idx = data.news.findIndex(function (n) { return n.id === id; });
+        if (idx >= 0) data.news[idx] = item;
+        else data.news.unshift(item);
+        persist();
+        renderNews();
+        document.getElementById("news-clear").click();
+        setStatus("ニュースを更新しました", "ok");
+      };
+
+      document.getElementById("news-clear").onclick = function () {
+        document.getElementById("news-id").value = "";
+        document.getElementById("news-date").value = todayStr();
+        document.getElementById("news-cat").value = "";
+        document.getElementById("news-title").value = "";
+        document.getElementById("news-text").value = "";
+      };
+
+      /* ---- vod actions ---- */
+      document.getElementById("vod-file").onchange = function (e) {
+        pendingFile = (e.target.files && e.target.files[0]) || null;
+      };
+
+      document.getElementById("vod-add").onclick = async function () {
+        var id = document.getElementById("vod-id").value || SiteData.uid("v");
+        var item = {
+          id: id,
+          title: document.getElementById("vod-title").value.trim(),
+          date: document.getElementById("vod-date").value.trim() || todayStr(),
+          type: document.getElementById("vod-type").value || "video",
+          src: document.getElementById("vod-src").value.trim(),
+          note: document.getElementById("vod-note").value.trim(),
+          fileId: null
+        };
+        if (!item.title) {
+          setStatus("タイトルを入れてください", "err");
+          return;
+        }
+
+        var existing = data.vods.find(function (v) { return v.id === id; });
+        if (existing && existing.fileId) item.fileId = existing.fileId;
+
+        if (pendingFile) {
+          var fid = item.fileId || SiteData.uid("vid");
+          setStatus("動画を保存中… (" + pendingFile.name + ")", "ok");
+          try {
+            await SiteData.media.put(fid, pendingFile, {
+              name: pendingFile.name,
+              type: pendingFile.type
+            });
+            item.fileId = fid;
+            item.type = "video";
+            if (!item.note) item.note = pendingFile.name;
+          } catch (err) {
+            setStatus("アップロード失敗: " + (err.message || err), "err");
+            return;
+          }
+        }
+
+        if (!item.src && !item.fileId) {
+          setStatus("URL か動画ファイルのどちらかが必要です", "err");
+          return;
+        }
+
+        var idx = data.vods.findIndex(function (v) { return v.id === id; });
+        if (idx >= 0) data.vods[idx] = item;
+        else data.vods.unshift(item);
+        persist();
+        renderVods();
+        document.getElementById("vod-clear").click();
+        setStatus("VOD を更新しました", "ok");
+      };
+
+      document.getElementById("vod-clear").onclick = function () {
+        document.getElementById("vod-id").value = "";
+        document.getElementById("vod-title").value = "";
+        document.getElementById("vod-date").value = todayStr();
+        document.getElementById("vod-type").value = "video";
+        document.getElementById("vod-src").value = "";
+        document.getElementById("vod-note").value = "";
+        document.getElementById("vod-file").value = "";
+        pendingFile = null;
+      };
+
+      /* ---- repo actions ---- */
+      document.getElementById("repo-add").onclick = function () {
+        var name = document.getElementById("repo-name").value.trim();
+        var url = document.getElementById("repo-url").value.trim();
+        var id = document.getElementById("repo-id").value || name;
+        if (!name || !url) {
+          setStatus("名前と git URL を入れてください", "err");
+          return;
+        }
+        if (!/\.git$/i.test(url) && /^https?:\/\//i.test(url)) {
+          // allow without .git
+        }
+        // shorthand owner/repo
+        if (/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(url)) {
+          url = "https://github.com/" + url.replace(/\.git$/, "") + ".git";
+        }
+        var item = { id: id || SiteData.uid("r"), name: name, url: url };
+        var idx = data.repos.findIndex(function (r) {
+          return r.id === item.id || r.name === item.name;
+        });
+        if (idx >= 0) data.repos[idx] = item;
+        else data.repos.push(item);
+        persist();
+        renderRepos();
+        document.getElementById("repo-clear").click();
+        setStatus("リポジトリを更新しました", "ok");
+      };
+
+      document.getElementById("repo-clear").onclick = function () {
+        document.getElementById("repo-id").value = "";
+        document.getElementById("repo-name").value = "";
+        document.getElementById("repo-url").value = "";
+      };
+
+      /* ---- live ---- */
+      document.getElementById("live-save").onclick = function () {
+        data.live = {
+          type: document.getElementById("live-type").value || "iframe",
+          src: document.getElementById("live-src").value.trim()
+        };
+        persist();
+        setStatus("LIVE 設定を保存しました", "ok");
+      };
+
+      /* ---- top bar ---- */
+      document.getElementById("btn-save").onclick = function () {
+        persist();
+      };
+
+      document.getElementById("btn-export").onclick = function () {
+        var blob = new Blob([JSON.stringify(SiteData.normalize(data), null, 2) + "\n"], {
+          type: "application/json"
+        });
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "site.json";
+        a.click();
+        URL.revokeObjectURL(a.href);
+        setStatus("site.json をダウンロードしました → data/site.json に置いて push", "ok");
+      };
+
+      document.getElementById("btn-import").onclick = function () {
+        document.getElementById("import-file").click();
+      };
+
+      document.getElementById("import-file").onchange = function (e) {
+        var f = e.target.files && e.target.files[0];
+        if (!f) return;
+        var reader = new FileReader();
+        reader.onload = function () {
+          try {
+            data = SiteData.normalize(JSON.parse(String(reader.result)));
+            persist();
+            refreshAll();
+            setStatus("JSON を読み込みました", "ok");
+          } catch (err) {
+            setStatus("JSON が不正です", "err");
+          }
+        };
+        reader.readAsText(f);
+        e.target.value = "";
+      };
+
+      document.getElementById("btn-reset").onclick = function () {
+        if (!confirm("localStorage の下書きを破棄して data/site.json に戻しますか？")) return;
+        SiteData.clearLocal();
+        SiteData.load().then(function (d) {
+          data = d;
+          refreshAll();
+          setStatus("下書きを破棄しました", "ok");
+        });
+      };
+
+      document.getElementById("btn-logout").onclick = function () {
+        setAuthed(false);
+        showGate();
+      };
+
+      document.getElementById("pw-change").onclick = async function () {
+        var a = document.getElementById("pw-new").value;
+        var b = document.getElementById("pw-new2").value;
+        if (!a || a.length < 4) {
+          setStatus("4文字以上にしてください", "err");
+          return;
+        }
+        if (a !== b) {
+          setStatus("確認が一致しません", "err");
+          return;
+        }
+        var h = await sha256(a);
+        localStorage.setItem(PW_KEY, h);
+        document.getElementById("pw-new").value = "";
+        document.getElementById("pw-new2").value = "";
+        setStatus("パスワードを変更しました", "ok");
+      };
+
+      /* ---- login ---- */
+      document.getElementById("btn-login").onclick = async function () {
+        var pw = document.getElementById("pw-input").value;
+        if (await checkPassword(pw)) {
+          setAuthed(true);
+          document.getElementById("pw-input").value = "";
+          await boot();
+          showApp();
+        } else {
+          setStatus("パスワードが違います", "err");
+          alert("パスワードが違います");
+        }
+      };
+
+      document.getElementById("pw-input").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") document.getElementById("btn-login").click();
+      });
+
+      async function boot() {
+        data = await SiteData.load();
+        document.getElementById("news-date").value = todayStr();
+        document.getElementById("vod-date").value = todayStr();
+      }
+
+      // init
+      ensureDefaultHash().then(function () {
+        if (isAuthed()) {
+          boot().then(showApp);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+# 9ostudio itch.io theme editor values
+# Paste these into Edit theme on profile + project pages
+
+Background:        #000000
+Panel / BG2:       #0a0a0a
+Text:              #cccccc
+Link:              #ffffff
+Button:            #333333
+Button text:       #ffffff
+Button hover:      #ffffff  (if available; hover text black via CSS)
+Border:            #666666
+Accent:            #888888
+
+Font:              System / sans-serif (Gothic if available)
+Font size:         Default or ~14–16

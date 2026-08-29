@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>9ostudio - 作品</title>
+  <meta name="description" content="9ostudio の作品 — art / music / game">
+  <meta name="theme-color" content="#000000">
+  <style>
+    /* japanese web 1.0 work page — monochrome, single block */
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: #cccccc;
+      font-family: "MS PGothic", "MS Gothic", "Hiragino Kaku Gothic ProN", "Osaka", "Yu Gothic", sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      background: #000000;
+    }
+
+    body {
+      background-color: #000000;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 30% 65%, #aaa 50%, transparent 51%),
+        radial-gradient(1px 1px at 55% 15%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 70% 80%, #888 50%, transparent 51%),
+        radial-gradient(1px 1px at 85% 40%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 15% 90%, #aaa 50%, transparent 51%),
+        radial-gradient(1px 1px at 45% 45%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 92% 70%, #888 50%, transparent 51%),
+        radial-gradient(1px 1px at 5% 50%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 60% 95%, #aaa 50%, transparent 51%);
+      background-size: 220px 220px;
+    }
+
+    a {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    a:visited {
+      color: #999999;
+    }
+
+    a:hover {
+      color: #000000;
+      background: #ffffff;
+    }
+
+    .wrap {
+      width: 680px;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 16px 8px 28px;
+      box-sizing: border-box;
+    }
+
+    .page {
+      background: #0a0a0a;
+      border: 2px solid #666666;
+    }
+
+    .nav {
+      padding: 8px 12px;
+      font-size: 13px;
+      border-bottom: 1px solid #444444;
+      line-height: 1.8;
+      color: #666666;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px 12px;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav a {
+      color: #cccccc;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav a:visited { color: #cccccc; }
+    .nav a:hover { color: #000000; background: #ffffff; text-decoration: none; }
+    .nav .sep { margin: 0 4px; color: #555555; }
+    .nav .here { color: #ffffff; font-weight: bold; }
+
+    .lang {
+      font-size: 12px;
+      white-space: nowrap;
+      margin-left: auto;
+      line-height: 1.8;
+    }
+
+    .lang a {
+      color: #888888;
+      text-decoration: none;
+      padding: 0 2px;
+    }
+
+    .lang a:visited { color: #888888; }
+
+    .lang a.on,
+    .lang a.on:visited {
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .lang a:hover {
+      color: #000000;
+      background: #ffffff;
+      text-decoration: none;
+    }
+
+    .lang .sep {
+      margin: 0 2px;
+      color: #555555;
+    }
+
+    .masthead {
+      background: #1a1a1a;
+      border-bottom: 1px solid #555555;
+      padding: 10px 12px;
+    }
+
+    .masthead h1 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .masthead .desc {
+      margin: 3px 0 0;
+      font-size: 12px;
+      color: #888888;
+    }
+
+    .subnav {
+      padding: 6px 12px;
+      font-size: 12px;
+      border-bottom: 1px solid #333333;
+      color: #666666;
+      background: #0f0f0f;
+    }
+
+    .subnav a {
+      color: #bbbbbb;
+      text-decoration: none;
+    }
+
+    .subnav a:visited {
+      color: #bbbbbb;
+    }
+
+    .subnav a:hover {
+      color: #000000;
+      background: #ffffff;
+    }
+
+    .subnav .sep {
+      margin: 0 4px;
+      color: #444444;
+    }
+
+    .sect {
+      margin: 0;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #ffffff;
+      background: #222222;
+      border-top: 1px solid #444444;
+      border-bottom: 1px solid #444444;
+    }
+
+    .sect .mark {
+      color: #aaaaaa;
+    }
+
+    .list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 13px;
+    }
+
+    .list li {
+      padding: 8px 12px;
+      border-bottom: 1px dotted #333333;
+    }
+
+    .list li:last-child {
+      border-bottom: none;
+    }
+
+    .list li:hover {
+      background: #141414;
+    }
+
+    .list .name {
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .list .meta {
+      margin-top: 2px;
+      font-size: 12px;
+      color: #888888;
+    }
+
+    .list .empty {
+      color: #666666;
+      font-size: 12px;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #666666;
+      border-top: 1px solid #444444;
+      padding: 10px 8px;
+      background: #111111;
+    }
+
+    .footer .quiet {
+      margin-top: 4px;
+      color: #555555;
+    }
+
+    @media (max-width: 700px) {
+      .wrap {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <div class="page">
+
+      <nav class="nav" aria-label="メニュー">
+        <div class="nav-links">
+          <a href="index.html" data-i18n="nav.top">トップ</a>
+          <span class="sep">|</span>
+          <a href="news.html" data-i18n="nav.news">ニュース</a>
+          <span class="sep">|</span>
+          <span class="here" data-i18n="nav.work">作品</span>
+          <span class="sep">|</span>
+          <a href="vod.html" data-i18n="nav.vod">VOD</a>
+          <span class="sep">|</span>
+          <a href="live.html" data-i18n="nav.live">LIVE</a>
+          <span class="sep">|</span>
+          <a href="git.html" data-i18n="nav.git">Git</a><span class="sep">|</span>
+          <a href="forum.html" data-i18n="nav.forum">掲示板</a>
+        </div>
+        <div class="lang" aria-label="Language">
+          <a href="#" data-lang="ja">JP</a><span class="sep">/</span><a href="#" data-lang="en">EN</a>
+        </div>
+      </nav>
+
+      <div class="masthead">
+        <h1 data-i18n="work.title">9ostudio 作品</h1>
+        <p class="desc" data-i18n="work.desc">art / music / game</p>
+      </div>
+
+      <div class="subnav">
+        <span data-i18n="work.cat">カテゴリ：</span>
+        <a href="#art">art</a><span class="sep">|</span>
+        <a href="#music">music</a><span class="sep">|</span>
+        <a href="#game">game</a>
+      </div>
+
+      <h2 class="sect" id="art"><span class="mark">■</span> art</h2>
+      <ul class="list">
+        <li>
+          <div class="name">—</div>
+          <div class="meta empty" data-i18n="work.empty">まだありません。準備中…</div>
+        </li>
+      </ul>
+
+      <h2 class="sect" id="music"><span class="mark">■</span> music</h2>
+      <ul class="list">
+        <li>
+          <div class="name">—</div>
+          <div class="meta empty" data-i18n="work.empty">まだありません。準備中…</div>
+        </li>
+      </ul>
+
+      <h2 class="sect" id="game"><span class="mark">■</span> game</h2>
+      <ul class="list">
+        <li>
+          <div class="name">Games</div>
+          <div class="meta">
+            → <a href="https://9ostudio.itch.io" target="_blank" rel="noopener noreferrer">itch.io</a>
+            · <a href="https://gamejolt.com/@9ostudio" target="_blank" rel="noopener noreferrer">Game Jolt</a>
+            · <a href="https://store.steampowered.com/developer/9ostudio" target="_blank" rel="noopener noreferrer">Steam</a>
+          </div>
+        </li>
+      </ul>
+
+      <div class="footer">
+        <div>© 9ostudio</div>
+        <div class="quiet" data-i18n="footer.solo">このページはひとりでコツコツ更新しています</div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/i18n.js"></script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+/* 9ostudio · monochrome web1.0 · PROFILE
+   Paste into: Edit theme → Custom CSS (profile)
+   Scope: page content only
+*/
+
+#wrapper{
+  --bg:#000;
+  --panel:#0a0a0a;
+  --text:#ccc;
+  --muted:#888;
+  --faint:#666;
+  --line:#444;
+  --border:#666;
+  --hi:#fff;
+  color:var(--text)!important;
+  background-color:var(--bg)!important;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%,#fff 50%,transparent 51%),
+    radial-gradient(1px 1px at 30% 65%,#aaa 50%,transparent 51%),
+    radial-gradient(1px 1px at 55% 15%,#fff 50%,transparent 51%),
+    radial-gradient(1px 1px at 70% 80%,#888 50%,transparent 51%),
+    radial-gradient(1px 1px at 85% 40%,#fff 50%,transparent 51%),
+    radial-gradient(1px 1px at 15% 90%,#aaa 50%,transparent 51%),
+    radial-gradient(1px 1px at 45% 45%,#fff 50%,transparent 51%),
+    radial-gradient(1px 1px at 92% 70%,#888 50%,transparent 51%)!important;
+  background-size:220px 220px!important;
+  font-family:"MS PGothic","MS Gothic","Hiragino Kaku Gothic ProN","Osaka","Yu Gothic",sans-serif!important;
+}
+
+#wrapper a{color:var(--hi)!important;text-decoration:underline}
+#wrapper a:visited{color:#999!important}
+#wrapper a:hover{color:#000!important;background:var(--hi)!important;text-decoration:none}
+
+/* main profile card */
+#wrapper .profile_header,
+#wrapper .header_widget,
+#wrapper .user_header,
+#wrapper .stat_header_widget,
+#wrapper .profile_content,
+#wrapper .inner_column,
+#wrapper .responsive_grid,
+#wrapper .game_grid_widget{
+  background:var(--panel)!important;
+  border:2px solid var(--border)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+
+#wrapper .profile_header,
+#wrapper .header_widget,
+#wrapper .user_header{
+  border-bottom:1px solid var(--line)!important;
+  padding:12px!important;
+}
+
+#wrapper h1,
+#wrapper h2,
+#wrapper .name,
+#wrapper .header_widget .name,
+#wrapper .object_title{
+  color:var(--hi)!important;
+  font-weight:bold!important;
+  letter-spacing:.04em;
+  text-shadow:none!important;
+}
+
+#wrapper .user_bio,
+#wrapper .formatted,
+#wrapper .user_formatted,
+#wrapper p{color:var(--text)!important;line-height:1.6}
+
+#wrapper .stat_header_widget,
+#wrapper .stat_box,
+#wrapper .info_panel{
+  background:#111!important;
+  border:1px solid var(--line)!important;
+  color:var(--muted)!important;
+  border-radius:0!important;
+}
+
+/* collection headers like COMING SOON */
+#wrapper .collection_header,
+#wrapper h2.header,
+#wrapper .games_header,
+#wrapper .section_title{
+  background:#222!important;
+  color:var(--hi)!important;
+  border:1px solid var(--line)!important;
+  border-left:6px solid var(--hi)!important;
+  border-radius:0!important;
+  font-size:13px!important;
+  padding:4px 10px!important;
+  margin:16px 0 8px!important;
+}
+
+/* game cells */
+#wrapper .game_cell,
+#wrapper .game_grid_widget .game_cell{
+  background:#0a0a0a!important;
+  border:1px solid var(--line)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+
+#wrapper .game_cell:hover{
+  border-color:var(--border)!important;
+  background:#111!important;
+}
+
+#wrapper .game_cell .game_thumb{
+  border-radius:0!important;
+  border-bottom:1px solid var(--line)!important;
+}
+
+#wrapper .game_cell .title,
+#wrapper .game_cell .game_title,
+#wrapper .game_cell a.title{
+  color:var(--hi)!important;
+  text-decoration:none!important;
+  font-size:13px!important;
+}
+
+#wrapper .game_cell .game_author,
+#wrapper .game_cell .game_genre,
+#wrapper .game_cell .game_text,
+#wrapper .game_cell .meta_row{
+  color:var(--muted)!important;
+  font-size:12px!important;
+}
+
+#wrapper .game_cell .price_value,
+#wrapper .game_cell .price{
+  color:var(--text)!important;
+  border:1px solid var(--line)!important;
+  background:#000!important;
+  border-radius:0!important;
+}
+
+/* buttons */
+#wrapper .button,
+#wrapper button,
+#wrapper .follow_button,
+#wrapper .buy_btn,
+#wrapper a.button{
+  background:#333!important;
+  color:var(--hi)!important;
+  border:2px outset #888!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+  font-family:inherit!important;
+}
+
+#wrapper .button:hover,
+#wrapper a.button:hover{
+  background:var(--hi)!important;
+  color:#000!important;
+  border-color:#ccc!important;
+}
+
+/* optional custom HTML box in bio */
+#wrapper .custom-9o-box{
+  background:#000;
+  border:1px dashed var(--border);
+  padding:10px 12px;
+  margin:8px 0;
+  font-size:13px;
+}
+#wrapper .custom-9o-nav{
+  font-size:12px;
+  color:var(--muted);
+  border-bottom:1px solid var(--line);
+  padding-bottom:6px;
+  margin-bottom:8px;
+}
+#wrapper .custom-9o-box a{color:var(--hi)}
+
+/* keep footer readable; do not hide */
+#wrapper .footer,
+#wrapper .page_footer{
+  background:#111!important;
+  border-top:1px solid var(--line)!important;
+  color:var(--faint)!important;
+}

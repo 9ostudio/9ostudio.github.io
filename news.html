@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>9ostudio - ニュース</title>
+  <meta name="description" content="9ostudio の更新ニュース。">
+  <meta name="theme-color" content="#000000">
+  <style>
+    /* japanese web 1.0 news feed — monochrome, single block */
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: #cccccc;
+      font-family: "MS PGothic", "MS Gothic", "Hiragino Kaku Gothic ProN", "Osaka", "Yu Gothic", sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      background: #000000;
+    }
+
+    body {
+      background-color: #000000;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 30% 65%, #aaa 50%, transparent 51%),
+        radial-gradient(1px 1px at 55% 15%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 70% 80%, #888 50%, transparent 51%),
+        radial-gradient(1px 1px at 85% 40%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 15% 90%, #aaa 50%, transparent 51%),
+        radial-gradient(1px 1px at 45% 45%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 92% 70%, #888 50%, transparent 51%),
+        radial-gradient(1px 1px at 5% 50%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 60% 95%, #aaa 50%, transparent 51%);
+      background-size: 220px 220px;
+    }
+
+    a {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    a:visited {
+      color: #999999;
+    }
+
+    a:hover {
+      color: #000000;
+      background: #ffffff;
+    }
+
+    .wrap {
+      width: 680px;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 16px 8px 28px;
+      box-sizing: border-box;
+    }
+
+    .page {
+      background: #0a0a0a;
+      border: 2px solid #666666;
+    }
+
+    .nav {
+      padding: 8px 12px;
+      font-size: 13px;
+      border-bottom: 1px solid #444444;
+      line-height: 1.8;
+      color: #666666;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px 12px;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav a {
+      color: #cccccc;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav a:visited { color: #cccccc; }
+    .nav a:hover { color: #000000; background: #ffffff; text-decoration: none; }
+    .nav .sep { margin: 0 4px; color: #555555; }
+    .nav .here { color: #ffffff; font-weight: bold; }
+
+    .lang {
+      font-size: 12px;
+      white-space: nowrap;
+      margin-left: auto;
+      line-height: 1.8;
+    }
+
+    .lang a {
+      color: #888888;
+      text-decoration: none;
+      padding: 0 2px;
+    }
+
+    .lang a:visited { color: #888888; }
+
+    .lang a.on,
+    .lang a.on:visited {
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .lang a:hover {
+      color: #000000;
+      background: #ffffff;
+      text-decoration: none;
+    }
+
+    .lang .sep {
+      margin: 0 2px;
+      color: #555555;
+    }
+
+    .masthead {
+      background: #1a1a1a;
+      border-bottom: 1px solid #555555;
+      padding: 10px 12px;
+    }
+
+    .masthead h1 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .masthead .desc {
+      margin: 3px 0 0;
+      font-size: 12px;
+      color: #888888;
+    }
+
+    .sect {
+      margin: 0;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #ffffff;
+      background: #222222;
+      border-top: 1px solid #444444;
+      border-bottom: 1px solid #444444;
+    }
+
+    .sect .mark {
+      color: #aaaaaa;
+    }
+
+    .feed {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .feed tr {
+      border-bottom: 1px dotted #333333;
+    }
+
+    .feed tr:last-child {
+      border-bottom: none;
+    }
+
+    .feed tr:hover {
+      background: #141414;
+    }
+
+    .feed .date {
+      width: 6.2em;
+      padding: 8px 8px 8px 10px;
+      color: #888888;
+      white-space: nowrap;
+      vertical-align: top;
+      font-family: "MS Gothic", "Courier New", monospace;
+      font-size: 12px;
+    }
+
+    .feed .cat {
+      width: 4.5em;
+      padding: 8px 4px;
+      vertical-align: top;
+      white-space: nowrap;
+    }
+
+    .feed .cat span {
+      display: inline-block;
+      padding: 0 4px;
+      font-size: 11px;
+      border: 1px solid #666666;
+      color: #bbbbbb;
+      background: #111111;
+    }
+
+    .feed .body {
+      padding: 8px 10px 8px 6px;
+      color: #dddddd;
+      vertical-align: top;
+    }
+
+    .feed .body .title {
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .feed .body .text {
+      margin-top: 2px;
+      color: #999999;
+      font-size: 12px;
+    }
+
+    .note {
+      padding: 0 12px 10px;
+      margin: 0;
+      font-size: 11px;
+      color: #666666;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #666666;
+      border-top: 1px solid #444444;
+      padding: 10px 8px;
+      background: #111111;
+    }
+
+    .footer .quiet {
+      margin-top: 4px;
+      color: #555555;
+    }
+
+    @media (max-width: 700px) {
+      .wrap {
+        width: 100%;
+      }
+
+      .feed .cat {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <div class="page">
+
+      <nav class="nav" aria-label="メニュー">
+        <div class="nav-links">
+          <a href="index.html" data-i18n="nav.top">トップ</a>
+          <span class="sep">|</span>
+          <span class="here" data-i18n="nav.news">ニュース</span>
+          <span class="sep">|</span>
+          <a href="work.html" data-i18n="nav.work">作品</a>
+          <span class="sep">|</span>
+          <a href="vod.html" data-i18n="nav.vod">VOD</a>
+          <span class="sep">|</span>
+          <a href="live.html" data-i18n="nav.live">LIVE</a>
+          <span class="sep">|</span>
+          <a href="git.html" data-i18n="nav.git">Git</a><span class="sep">|</span>
+          <a href="forum.html" data-i18n="nav.forum">掲示板</a>
+        </div>
+        <div class="lang" aria-label="Language">
+          <a href="#" data-lang="ja">JP</a><span class="sep">/</span><a href="#" data-lang="en">EN</a>
+        </div>
+      </nav>
+
+      <div class="masthead">
+        <h1 data-i18n="news.title">9ostudio ニュース</h1>
+        <p class="desc" data-i18n="news.desc">更新は気まぐれです</p>
+      </div>
+
+      <h2 class="sect"><span class="mark">■</span> <span data-i18n="news.sect">最新ニュース</span></h2>
+      <table class="feed">
+        <tbody id="news-body">
+          <tr><td class="body" colspan="3" style="padding:12px;color:#666" data-i18n="news.loading">読み込み中…</td></tr>
+        </tbody>
+      </table>
+      <p class="note" data-i18n="news.note">※ admin から追加できます。</p>
+
+      <div class="footer">
+        <div>© 9ostudio</div>
+        <div class="quiet" data-i18n="footer.solo">このページはひとりでコツコツ更新しています</div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/site-data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script>
+    function esc(s) {
+      return String(s == null ? "" : s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    SiteData.load().then(function (data) {
+      var body = document.getElementById("news-body");
+      var news = data.news || [];
+      if (!news.length) {
+        var empty = (window.I18n && I18n.t("news.empty")) || "まだニュースがありません";
+        body.innerHTML = '<tr><td class="body" colspan="3" style="padding:12px;color:#666">' + empty + "</td></tr>";
+        return;
+      }
+      body.innerHTML = news.map(function (n) {
+        return (
+          "<tr>" +
+          '<td class="date">' + esc(n.date || "----/--/--") + "</td>" +
+          '<td class="cat"><span>' + esc(n.cat || "—") + "</span></td>" +
+          '<td class="body">' +
+          '<div class="title">' + esc(n.title || "") + "</div>" +
+          (n.text ? '<div class="text">' + esc(n.text) + "</div>" : "") +
+          "</td></tr>"
+        );
+      }).join("");
+    });
+  </script>
+
+</body>
+</html>

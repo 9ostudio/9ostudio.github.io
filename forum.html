@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>9ostudio - 掲示板</title>
+  <meta name="description" content="9ostudio 簡易掲示板">
+  <meta name="theme-color" content="#000000">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: #cccccc;
+      font-family: "MS PGothic", "MS Gothic", "Hiragino Kaku Gothic ProN", "Osaka", "Yu Gothic", sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      background: #000000;
+    }
+
+    body {
+      background-color: #000000;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 30% 65%, #aaa 50%, transparent 51%),
+        radial-gradient(1px 1px at 55% 15%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 70% 80%, #888 50%, transparent 51%),
+        radial-gradient(1px 1px at 85% 40%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 15% 90%, #aaa 50%, transparent 51%),
+        radial-gradient(1px 1px at 45% 45%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 92% 70%, #888 50%, transparent 51%);
+      background-size: 220px 220px;
+    }
+
+    a { color: #ffffff; text-decoration: underline; }
+    a:visited { color: #999999; }
+    a:hover { color: #000000; background: #ffffff; }
+
+    .wrap {
+      width: 680px;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 16px 8px 28px;
+      box-sizing: border-box;
+    }
+
+    .page {
+      background: #0a0a0a;
+      border: 2px solid #666666;
+    }
+
+    .nav {
+      padding: 8px 12px;
+      font-size: 13px;
+      border-bottom: 1px solid #444444;
+      line-height: 1.8;
+      color: #666666;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px 12px;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav a {
+      color: #cccccc;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav a:visited { color: #cccccc; }
+    .nav a:hover { color: #000000; background: #ffffff; text-decoration: none; }
+    .nav .sep { margin: 0 4px; color: #555555; }
+    .nav .here { color: #ffffff; font-weight: bold; }
+
+    .lang {
+      font-size: 12px;
+      white-space: nowrap;
+      margin-left: auto;
+      line-height: 1.8;
+    }
+
+    .lang a {
+      color: #888888;
+      text-decoration: none;
+      padding: 0 2px;
+    }
+
+    .lang a:visited { color: #888888; }
+    .lang a.on, .lang a.on:visited { color: #ffffff; font-weight: bold; }
+    .lang a:hover { color: #000000; background: #ffffff; text-decoration: none; }
+    .lang .sep { margin: 0 2px; color: #555555; }
+
+    .masthead {
+      background: #1a1a1a;
+      border-bottom: 1px solid #555555;
+      padding: 10px 12px;
+    }
+
+    .masthead h1 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .masthead .desc {
+      margin: 3px 0 0;
+      font-size: 12px;
+      color: #888888;
+    }
+
+    .crumb {
+      padding: 6px 10px;
+      font-size: 12px;
+      border-bottom: 1px solid #333333;
+      background: #111111;
+      color: #888888;
+      word-break: break-all;
+    }
+
+    .crumb a {
+      color: #cccccc;
+      text-decoration: none;
+    }
+
+    .crumb a:hover { color: #000; background: #fff; }
+    .crumb .sep { margin: 0 4px; color: #555; }
+
+    .sect {
+      margin: 0;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #ffffff;
+      background: #222222;
+      border-top: 1px solid #444444;
+      border-bottom: 1px solid #444444;
+    }
+
+    .sect .mark { color: #aaaaaa; }
+
+    .status-bar {
+      padding: 4px 10px;
+      font-size: 11px;
+      color: #777777;
+      border-bottom: 1px solid #333333;
+      background: #0a0a0a;
+      min-height: 1.3em;
+    }
+
+    .status-bar.err { color: #cccccc; }
+
+    table.bbs {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    table.bbs th {
+      text-align: left;
+      padding: 5px 8px;
+      background: #1a1a1a;
+      color: #888888;
+      font-weight: normal;
+      border-bottom: 1px solid #444444;
+      font-size: 12px;
+    }
+
+    table.bbs td {
+      padding: 7px 8px;
+      border-bottom: 1px dotted #2a2a2a;
+      vertical-align: top;
+    }
+
+    table.bbs tr:hover td { background: #141414; }
+
+    table.bbs a {
+      color: #eeeeee;
+      text-decoration: none;
+    }
+
+    table.bbs a:hover { color: #000; background: #fff; }
+
+    table.bbs .num {
+      width: 2.2em;
+      color: #666;
+      font-family: "MS Gothic", "Courier New", monospace;
+      font-size: 12px;
+    }
+
+    table.bbs .meta {
+      color: #777;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    table.bbs .count {
+      text-align: right;
+      color: #888;
+      font-family: "MS Gothic", "Courier New", monospace;
+      font-size: 12px;
+      width: 3em;
+    }
+
+    table.bbs .pin {
+      color: #aaa;
+      font-size: 11px;
+      margin-right: 4px;
+    }
+
+    table.bbs .board-desc {
+      color: #777;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .empty {
+      padding: 14px 12px;
+      color: #666;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    /* posts */
+    .post {
+      border-bottom: 1px solid #2a2a2a;
+      padding: 10px 12px;
+    }
+
+    .post:nth-child(even) { background: #0c0c0c; }
+
+    .post-head {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 6px;
+      font-family: "MS Gothic", "Courier New", monospace;
+    }
+
+    .post-head .no { color: #aaa; margin-right: 8px; }
+    .post-head .name { color: #ffffff; font-weight: bold; font-family: "MS PGothic", "MS Gothic", sans-serif; }
+    .post-head .date { color: #666; margin-left: 8px; }
+
+    .post-body {
+      color: #dddddd;
+      font-size: 13px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.65;
+    }
+
+    .post-actions {
+      margin-top: 6px;
+      font-size: 11px;
+    }
+
+    .post-actions button {
+      background: none;
+      border: 0;
+      color: #666;
+      font: inherit;
+      font-size: 11px;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+    }
+
+    .post-actions button:hover {
+      color: #000;
+      background: #fff;
+    }
+
+    /* forms */
+    .form-box {
+      padding: 10px 12px 14px;
+      border-top: 1px solid #333;
+      background: #0f0f0f;
+    }
+
+    .form-box h3 {
+      margin: 0 0 8px;
+      font-size: 13px;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    label.field {
+      display: block;
+      margin: 0 0 8px;
+      font-size: 12px;
+      color: #888;
+    }
+
+    label.field span { display: block; margin-bottom: 2px; }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      background: #000;
+      border: 1px solid #555;
+      color: #eee;
+      font: inherit;
+      font-size: 13px;
+      padding: 5px 6px;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+      font-family: "MS Gothic", "Courier New", monospace;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    input:focus, textarea:focus {
+      outline: 1px solid #888;
+      border-color: #888;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    button.btn {
+      background: #333;
+      border: 2px outset #888;
+      color: #fff;
+      font: inherit;
+      font-size: 12px;
+      padding: 3px 12px;
+      cursor: pointer;
+    }
+
+    button.btn:hover {
+      background: #fff;
+      color: #000;
+      border-color: #ccc;
+    }
+
+    button.btn:active { border-style: inset; }
+    button.btn:disabled { opacity: 0.45; cursor: default; }
+
+    .toolbar {
+      padding: 6px 10px;
+      font-size: 12px;
+      border-bottom: 1px solid #333;
+      background: #0f0f0f;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .toolbar a {
+      color: #ccc;
+      text-decoration: none;
+    }
+
+    .toolbar a:hover { color: #000; background: #fff; }
+
+    .note {
+      margin: 0;
+      padding: 8px 12px 10px;
+      font-size: 11px;
+      color: #666;
+      border-top: 1px solid #333;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #666;
+      border-top: 1px solid #444;
+      padding: 10px 8px;
+      background: #111;
+    }
+
+    .footer .quiet { margin-top: 4px; color: #555; }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 700px) {
+      .wrap { width: 100%; }
+      table.bbs .meta { white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="page">
+
+      <nav class="nav" aria-label="メニュー">
+        <div class="nav-links">
+          <a href="index.html" data-i18n="nav.top">トップ</a><span class="sep">|</span>
+          <a href="news.html" data-i18n="nav.news">ニュース</a><span class="sep">|</span>
+          <a href="work.html" data-i18n="nav.work">作品</a><span class="sep">|</span>
+          <a href="vod.html" data-i18n="nav.vod">VOD</a><span class="sep">|</span>
+          <a href="live.html" data-i18n="nav.live">LIVE</a><span class="sep">|</span>
+          <a href="git.html" data-i18n="nav.git">Git</a><span class="sep">|</span>
+          <span class="here" data-i18n="nav.forum">掲示板</span>
+        </div>
+        <div class="lang" aria-label="Language">
+          <a href="#" data-lang="ja">JP</a><span class="sep">/</span><a href="#" data-lang="en">EN</a>
+        </div>
+      </nav>
+
+      <div class="masthead">
+        <h1 data-i18n="forum.title">9ostudio 掲示板</h1>
+        <p class="desc" data-i18n="forum.desc">簡易 BBS · 書き込みはこのブラウザに保存</p>
+      </div>
+
+      <div class="crumb" id="crumb"></div>
+      <div class="status-bar" id="status"></div>
+      <div id="view"></div>
+
+      <p class="note" data-i18n="forum.note">
+        ※ この掲示板は静的サイト用です。投稿はあなたのブラウザ（localStorage）に保存され、他の訪問者とは共有されません。
+      </p>
+
+      <div class="footer">
+        <div>© 9ostudio</div>
+        <div class="quiet" data-i18n="footer.solo">このページはひとりでコツコツ更新しています</div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/forum-store.js"></script>
+  <script>
+    (function () {
+      var view = document.getElementById("view");
+      var crumb = document.getElementById("crumb");
+      var statusEl = document.getElementById("status");
+
+      function t(key, fallback) {
+        if (window.I18n && I18n.t(key)) return I18n.t(key);
+        return fallback;
+      }
+
+      function lang() {
+        return (window.I18n && I18n.getLang()) || "ja";
+      }
+
+      function localized(obj, fallback) {
+        if (!obj) return fallback || "";
+        if (typeof obj === "string") return obj;
+        var L = lang();
+        return obj[L] || obj.ja || obj.en || fallback || "";
+      }
+
+      function esc(s) {
+        return String(s == null ? "" : s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function fmtDate(ts) {
+        if (!ts) return "----/--/--";
+        var d = new Date(ts);
+        if (isNaN(d.getTime())) return "----/--/--";
+        function p(n) { return n < 10 ? "0" + n : "" + n; }
+        return d.getFullYear() + "/" + p(d.getMonth() + 1) + "/" + p(d.getDate()) +
+          " " + p(d.getHours()) + ":" + p(d.getMinutes());
+      }
+
+      function setStatus(msg, isErr) {
+        statusEl.textContent = msg || "";
+        statusEl.className = "status-bar" + (isErr ? " err" : "");
+      }
+
+      function parseRoute() {
+        var h = (location.hash || "").replace(/^#\/?/, "");
+        if (!h) return { view: "boards" };
+        var parts = h.split("/");
+        if (parts[0] === "b" && parts[1]) return { view: "board", boardId: decodeURIComponent(parts[1]) };
+        if (parts[0] === "t" && parts[1]) return { view: "thread", threadId: decodeURIComponent(parts[1]) };
+        if (parts[0] === "new" && parts[1]) return { view: "new", boardId: decodeURIComponent(parts[1]) };
+        return { view: "boards" };
+      }
+
+      function go(hash) {
+        location.hash = hash;
+      }
+
+      function setCrumb(items) {
+        // items: [{label, href?}]
+        crumb.innerHTML = items.map(function (it, i) {
+          var sep = i ? '<span class="sep">»</span> ' : "";
+          if (it.href) return sep + '<a href="' + esc(it.href) + '">' + esc(it.label) + "</a>";
+          return sep + '<span style="color:#ccc">' + esc(it.label) + "</span>";
+        }).join(" ");
+      }
+
+      /* -------- boards -------- */
+      function renderBoards() {
+        setCrumb([{ label: t("forum.title", "掲示板") }]);
+        var boards = ForumStore.listBoards();
+        var html = '<div class="sect"><span class="mark">■</span> ' + esc(t("forum.boards", "板一覧")) + "</div>";
+        if (!boards.length) {
+          html += '<div class="empty">' + esc(t("forum.noboards", "板がありません")) + "</div>";
+        } else {
+          html += '<table class="bbs"><thead><tr>' +
+            '<th>' + esc(t("forum.board", "板")) + "</th>" +
+            '<th class="count">' + esc(t("forum.threads", "スレ")) + "</th>" +
+            "</tr></thead><tbody>";
+          boards.forEach(function (b) {
+            var n = ForumStore.listThreads(b.id).length;
+            html +=
+              "<tr><td>" +
+              '<a href="#/b/' + encodeURIComponent(b.id) + '">' + esc(localized(b.name, b.id)) + "</a>" +
+              '<div class="board-desc">' + esc(localized(b.desc, "")) + "</div>" +
+              '</td><td class="count">' + n + "</td></tr>";
+          });
+          html += "</tbody></table>";
+        }
+        html +=
+          '<div class="toolbar">' +
+          '<a href="#" id="btn-export">' + esc(t("forum.export", "データ出力")) + "</a>" +
+          '<a href="#" id="btn-import">' + esc(t("forum.import", "データ読込")) + "</a>" +
+          '<a href="#" id="btn-clear">' + esc(t("forum.clear", "全削除")) + "</a>" +
+          '<input type="file" id="import-file" accept="application/json,.json" class="hidden">' +
+          "</div>";
+        view.innerHTML = html;
+        setStatus(t("forum.hint.boards", "板を選んでください"));
+
+        document.getElementById("btn-export").onclick = function (e) {
+          e.preventDefault();
+          var blob = new Blob([ForumStore.exportJson()], { type: "application/json" });
+          var a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = "forum-backup.json";
+          a.click();
+          URL.revokeObjectURL(a.href);
+          setStatus(t("forum.exported", "バックアップをダウンロードしました"));
+        };
+        document.getElementById("btn-import").onclick = function (e) {
+          e.preventDefault();
+          document.getElementById("import-file").click();
+        };
+        document.getElementById("import-file").onchange = function (e) {
+          var f = e.target.files && e.target.files[0];
+          if (!f) return;
+          var r = new FileReader();
+          r.onload = function () {
+            try {
+              ForumStore.importJson(String(r.result));
+              setStatus(t("forum.imported", "読み込みました"));
+              render();
+            } catch (err) {
+              setStatus(t("forum.importfail", "読込失敗") + ": " + err.message, true);
+            }
+          };
+          r.readAsText(f);
+          e.target.value = "";
+        };
+        document.getElementById("btn-clear").onclick = function (e) {
+          e.preventDefault();
+          if (!confirm(t("forum.clearconfirm", "掲示板データを全部消します。よろしいですか？"))) return;
+          ForumStore.clearAll();
+          ForumStore.load().then(function () {
+            setStatus(t("forum.cleared", "削除しました"));
+            render();
+          });
+        };
+      }
+
+      /* -------- thread list -------- */
+      function renderBoard(boardId) {
+        var board = ForumStore.getBoard(boardId);
+        if (!board) {
+          setStatus(t("forum.boardmissing", "板が見つかりません"), true);
+          go("#");
+          return;
+        }
+        var bname = localized(board.name, boardId);
+        setCrumb([
+          { label: t("forum.title", "掲示板"), href: "#" },
+          { label: bname }
+        ]);
+
+        var threads = ForumStore.listThreads(boardId);
+        var html =
+          '<div class="toolbar">' +
+          '<a href="#">' + esc(t("forum.backboards", "« 板一覧")) + "</a>" +
+          '<a href="#/new/' + encodeURIComponent(boardId) + '">' + esc(t("forum.newthread", "新規スレッド")) + "</a>" +
+          "</div>" +
+          '<div class="sect"><span class="mark">■</span> ' + esc(bname) + "</div>";
+
+        if (!threads.length) {
+          html += '<div class="empty">' + esc(t("forum.nothreads", "スレッドがありません。最初のスレを立てよう。")) + "</div>";
+        } else {
+          html += '<table class="bbs"><thead><tr>' +
+            '<th>' + esc(t("forum.subject", "タイトル")) + "</th>" +
+            '<th class="meta">' + esc(t("forum.updated", "更新")) + "</th>" +
+            '<th class="count">' + esc(t("forum.res", "レス")) + "</th>" +
+            "</tr></thead><tbody>";
+          threads.forEach(function (th) {
+            var res = (th.posts && th.posts.length) || 0;
+            html +=
+              "<tr><td>" +
+              (th.sticky ? '<span class="pin">[' + esc(t("forum.sticky", "固定")) + "]</span>" : "") +
+              (th.closed ? '<span class="pin">[' + esc(t("forum.closed", "閉")) + "]</span>" : "") +
+              '<a href="#/t/' + encodeURIComponent(th.id) + '">' + esc(th.title) + "</a>" +
+              '</td><td class="meta">' + esc(fmtDate(th.bumpedAt)) +
+              '</td><td class="count">' + res + "</td></tr>";
+          });
+          html += "</tbody></table>";
+        }
+        view.innerHTML = html;
+        setStatus(threads.length + " " + t("forum.threads", "スレ"));
+      }
+
+      /* -------- new thread -------- */
+      function renderNew(boardId) {
+        var board = ForumStore.getBoard(boardId);
+        if (!board) { go("#"); return; }
+        var bname = localized(board.name, boardId);
+        setCrumb([
+          { label: t("forum.title", "掲示板"), href: "#" },
+          { label: bname, href: "#/b/" + encodeURIComponent(boardId) },
+          { label: t("forum.newthread", "新規スレッド") }
+        ]);
+
+        view.innerHTML =
+          '<div class="toolbar"><a href="#/b/' + encodeURIComponent(boardId) + '">' +
+          esc(t("forum.backlist", "« スレ一覧")) + "</a></div>" +
+          '<div class="sect"><span class="mark">■</span> ' + esc(t("forum.newthread", "新規スレッド")) + " — " + esc(bname) + "</div>" +
+          '<div class="form-box">' +
+          '<label class="field"><span>' + esc(t("forum.name", "名前")) + '</span>' +
+          '<input type="text" id="f-name" maxlength="32" value="' + esc(ForumStore.getName()) + '"></label>' +
+          '<label class="field"><span>' + esc(t("forum.subject", "タイトル")) + '</span>' +
+          '<input type="text" id="f-title" maxlength="120"></label>' +
+          '<label class="field"><span>' + esc(t("forum.body", "本文")) + '</span>' +
+          '<textarea id="f-body" maxlength="8000"></textarea></label>' +
+          '<div class="btn-row"><button type="button" class="btn" id="f-submit">' +
+          esc(t("forum.submit", "書き込む")) + "</button></div>" +
+          "</div>";
+
+        setStatus(t("forum.hint.new", "タイトルと本文を書いて書き込み"));
+
+        document.getElementById("f-submit").onclick = function () {
+          var name = document.getElementById("f-name").value;
+          var title = document.getElementById("f-title").value;
+          var body = document.getElementById("f-body").value;
+          try {
+            ForumStore.setName(name);
+            var th = ForumStore.createThread(boardId, title, name, body);
+            setStatus(t("forum.posted", "書き込みました"));
+            go("#/t/" + encodeURIComponent(th.id));
+          } catch (err) {
+            setStatus(t("forum.postfail", "書き込み失敗") + ": " + err.message, true);
+          }
+        };
+      }
+
+      /* -------- thread view -------- */
+      function renderThread(threadId) {
+        var th = ForumStore.getThread(threadId);
+        if (!th) {
+          setStatus(t("forum.threadmissing", "スレッドが見つかりません"), true);
+          go("#");
+          return;
+        }
+        var board = ForumStore.getBoard(th.boardId);
+        var bname = board ? localized(board.name, th.boardId) : th.boardId;
+
+        setCrumb([
+          { label: t("forum.title", "掲示板"), href: "#" },
+          { label: bname, href: "#/b/" + encodeURIComponent(th.boardId) },
+          { label: th.title }
+        ]);
+
+        var html =
+          '<div class="toolbar">' +
+          '<a href="#/b/' + encodeURIComponent(th.boardId) + '">' + esc(t("forum.backlist", "« スレ一覧")) + "</a>" +
+          '<a href="#" id="btn-del-thread">' + esc(t("forum.delthread", "スレ削除")) + "</a>" +
+          "</div>" +
+          '<div class="sect"><span class="mark">■</span> ' + esc(th.title) + "</div>";
+
+        (th.posts || []).forEach(function (p, i) {
+          html +=
+            '<div class="post" id="p' + (i + 1) + '">' +
+            '<div class="post-head">' +
+            '<span class="no">No.' + (i + 1) + "</span>" +
+            '<span class="name">' + esc(p.name) + "</span>" +
+            '<span class="date">' + esc(fmtDate(p.createdAt)) + "</span>" +
+            "</div>" +
+            '<div class="post-body">' + esc(p.body) + "</div>" +
+            '<div class="post-actions">' +
+            '<button type="button" data-del-post="' + esc(p.id) + '">' + esc(t("forum.delpost", "削除")) + "</button>" +
+            "</div></div>";
+        });
+
+        if (th.closed) {
+          html += '<div class="empty">' + esc(t("forum.threadclosed", "このスレッドは閉じられています")) + "</div>";
+        } else {
+          html +=
+            '<div class="form-box">' +
+            "<h3>" + esc(t("forum.reply", "レスを書く")) + "</h3>" +
+            '<label class="field"><span>' + esc(t("forum.name", "名前")) + '</span>' +
+            '<input type="text" id="r-name" maxlength="32" value="' + esc(ForumStore.getName()) + '"></label>' +
+            '<label class="field"><span>' + esc(t("forum.body", "本文")) + '</span>' +
+            '<textarea id="r-body" maxlength="8000"></textarea></label>' +
+            '<div class="btn-row"><button type="button" class="btn" id="r-submit">' +
+            esc(t("forum.submit", "書き込む")) + "</button></div>" +
+            "</div>";
+        }
+
+        view.innerHTML = html;
+        setStatus((th.posts || []).length + " " + t("forum.res", "レス"));
+
+        document.getElementById("btn-del-thread").onclick = function (e) {
+          e.preventDefault();
+          if (!confirm(t("forum.delthreadconfirm", "このスレッドを削除しますか？"))) return;
+          ForumStore.deleteThread(threadId);
+          go("#/b/" + encodeURIComponent(th.boardId));
+        };
+
+        view.querySelectorAll("[data-del-post]").forEach(function (btn) {
+          btn.onclick = function () {
+            if (!confirm(t("forum.delpostconfirm", "このレスを削除しますか？"))) return;
+            ForumStore.deletePost(threadId, btn.getAttribute("data-del-post"));
+            render();
+          };
+        });
+
+        var sub = document.getElementById("r-submit");
+        if (sub) {
+          sub.onclick = function () {
+            var name = document.getElementById("r-name").value;
+            var body = document.getElementById("r-body").value;
+            try {
+              ForumStore.setName(name);
+              ForumStore.reply(threadId, name, body);
+              setStatus(t("forum.posted", "書き込みました"));
+              render();
+              // scroll to bottom
+              setTimeout(function () {
+                var posts = view.querySelectorAll(".post");
+                if (posts.length) posts[posts.length - 1].scrollIntoView({ behavior: "smooth", block: "start" });
+              }, 50);
+            } catch (err) {
+              setStatus(t("forum.postfail", "書き込み失敗") + ": " + err.message, true);
+            }
+          };
+        }
+      }
+
+      function render() {
+        var route = parseRoute();
+        if (route.view === "board") renderBoard(route.boardId);
+        else if (route.view === "thread") renderThread(route.threadId);
+        else if (route.view === "new") renderNew(route.boardId);
+        else renderBoards();
+        if (window.I18n) I18n.apply();
+      }
+
+      window.addEventListener("hashchange", render);
+      document.addEventListener("i18n:change", render);
+
+      ForumStore.load().then(function () {
+        render();
+      }).catch(function (err) {
+        setStatus(String(err.message || err), true);
+      });
+    })();
+  </script>
+</body>
+</html>
