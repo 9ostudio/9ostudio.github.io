@@ -387,9 +387,8 @@
 
       <!-- login -->
       <div id="gate">
-        <div class="login-box">
-          <p>管理パネルです。パスワードを入力してください。<br>
-            初期パスワード: <code>9ostudio</code>（下で変更可）</p>
+        <div class="login-box" id="gate-login">
+          <p>管理パネルです。パスワードを入力してください。</p>
           <label class="field">
             <span>password</span>
             <input type="password" id="pw-input" autocomplete="current-password">
@@ -397,6 +396,13 @@
           <div class="btn-row">
             <button type="button" id="btn-login">ログイン</button>
           </div>
+        </div>
+        <div class="login-box hidden" id="gate-setup">
+          <p>はじめての起動です。管理パネルのパスワードを設定してください。<br>
+            （このブラウザにだけ保存されます。ページ内の目隠しであり、公開データを守るものではありません）</p>
+          <label class="field"><span>password</span><input type="password" id="pw-setup" autocomplete="new-password"></label>
+          <label class="field"><span>確認</span><input type="password" id="pw-setup2" autocomplete="new-password"></label>
+          <div class="btn-row"><button type="button" id="btn-setup">設定してログイン</button></div>
         </div>
       </div>
 
@@ -534,7 +540,6 @@
     (function () {
       var PW_KEY = "9o_admin_pw_v1";
       var SESSION_KEY = "9o_admin_ok";
-      var DEFAULT_PW = "9ostudio";
 
       var data = SiteData.normalize({});
       var pendingFile = null; // File for vod upload
@@ -562,17 +567,13 @@
         return localStorage.getItem(PW_KEY);
       }
 
-      async function ensureDefaultHash() {
-        if (!getStoredHash()) {
-          var h = await sha256(DEFAULT_PW);
-          localStorage.setItem(PW_KEY, h);
-        }
-      }
-
+      /* No baked-in default: with no stored hash the gate shows the setup box
+         instead of accepting a password that is readable in this file's source. */
       async function checkPassword(pw) {
-        await ensureDefaultHash();
+        var stored = getStoredHash();
+        if (!stored) return false;
         var h = await sha256(pw);
-        return h === getStoredHash();
+        return h === stored;
       }
 
       function isAuthed() {
@@ -593,6 +594,9 @@
       function showGate() {
         app.classList.add("hidden");
         gate.classList.remove("hidden");
+        var setup = !getStoredHash();
+        document.getElementById("gate-setup").classList.toggle("hidden", !setup);
+        document.getElementById("gate-login").classList.toggle("hidden", setup);
       }
 
       function todayStr() {
@@ -996,6 +1000,20 @@
         document.getElementById("pw-new").value = "";
         document.getElementById("pw-new2").value = "";
         setStatus("パスワードを変更しました", "ok");
+      };
+
+      /* ---- first run: set the password ---- */
+      document.getElementById("btn-setup").onclick = async function () {
+        var a = document.getElementById("pw-setup").value;
+        var b = document.getElementById("pw-setup2").value;
+        if (a.length < 8) { setStatus("8文字以上にしてください", "err"); alert("8文字以上にしてください"); return; }
+        if (a !== b) { setStatus("確認が一致しません", "err"); alert("確認が一致しません"); return; }
+        localStorage.setItem(PW_KEY, await sha256(a));
+        document.getElementById("pw-setup").value = "";
+        document.getElementById("pw-setup2").value = "";
+        setAuthed(true);
+        await boot();
+        showApp();
       };
 
       /* ---- login ---- */

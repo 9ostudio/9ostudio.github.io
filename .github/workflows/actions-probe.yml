@@ -1,0 +1,12 @@
+# Temporary probe: does GitHub Actions run at all for this account? Every
+# private-repo workflow has startup-failed since 2026-07-29; a public repo
+# uses no paid minutes, so a run here separates "minutes exhausted" from
+# "Actions broken account-wide". Delete once answered.
+name: actions-probe
+on: [push, workflow_dispatch]
+permissions: {}
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "actions run on this account"
