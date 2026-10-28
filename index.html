@@ -1,158 +1,183 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>9o studio</title>
+<title>9oSTUDIO</title>
 <meta name="description" content="9oと申します。 ASMとCプログラマー">
-<meta name="theme-color" content="#000000">
-<style>
-  * { box-sizing: border-box; }
-  html { background: #000; color: #a9a3a3; font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
-  body {
-    margin: 0; min-height: 100vh; padding: 40px 16px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
-  }
-  main {
-    display: flex; flex-direction: column; align-items: center; gap: 24px;
-    width: min(100%, 560px); text-align: center;
-  }
-  section { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%; }
-  h1 { margin: 0; font-size: 16px; font-weight: normal; color: #fff; }
-  footer { color: #555; text-align: center; }
-  a, button { color: inherit; }
-  a:hover, button:hover, button[aria-pressed="true"] { color: #fff; }
-  a:focus-visible, button:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
-  .social { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
-  .social a { display: block; }
-  .social svg { display: block; width: 20px; height: 20px; fill: currentColor; }
-  .consoles { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
-  .consoles button { padding: 0; border: 0; background: none; font: inherit; cursor: pointer; }
-  .consoles button[aria-pressed="true"] { text-decoration: underline; text-underline-offset: 4px; }
-  .games { width: 100%; min-height: 1.5em; }
-  .games ul { display: grid; justify-items: center; gap: 16px; margin: 0; padding: 0; list-style: none; }
-  .games ul[hidden] { display: none; }
-  .games a { text-decoration: none; }
-  .games li { display: flex; align-items: center; justify-content: center; gap: 14px; }
-  .stores, .watch, .downloads { display: flex; gap: 10px; }
-  .downloads { margin-right: 6px; }
-  .games li.game { display: grid; grid-template-columns: 1fr auto 1fr; width: min(100%, 512px); padding: 0 20px; }
-  .shots { grid-column: 1 / -1; display: flex; justify-content: center; gap: 8px; width: 100%; margin-top: 4px; }
-  .shots button { width: calc((100% - 24px) / 4); padding: 0; border: 0; background: none; cursor: zoom-in; }
-  .shots img { display: block; width: 100%; height: auto; image-rendering: pixelated; }
-  .games li.game + li.game { padding-top: 16px; border-top: 1px solid #222; }
-  .game .stores { justify-self: start; }
-  .game .watch { justify-self: end; }
-  @media (max-width: 480px) {
-    .games li.game { grid-template-columns: 1fr; justify-items: center; }
-    .game .stores, .game .watch { justify-self: center; }
-  }
-  .games svg { display: block; width: 16px; height: 16px; fill: currentColor; }
-  [data-video], [data-play] { padding: 0; border: 0; background: none; cursor: pointer; }
-  dialog { width: min(100vw - 32px, 960px, (100vh - 96px) * 16 / 9); max-width: none; padding: 0; border: 0; background: none; color: inherit; overflow: visible; }
-  dialog::backdrop { background: rgba(0, 0, 0, .9); }
-  dialog iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; background: #111; }
-  dialog[data-mode="game"] { width: min(100vw - 32px, 768px, (100vh - 96px) * var(--ratio, 1.143)); }
-  dialog[data-mode="game"] iframe { aspect-ratio: var(--ratio, 1.143); background: #000; }
-  dialog[data-mode="image"] { width: fit-content; }
-  dialog[data-mode="image"] iframe, dialog:not([data-mode="image"]) .full { display: none; }
-  .full { display: block; max-width: min(100vw - 32px, 768px); max-height: calc(100vh - 96px); }
-  .close { display: block; margin: 0 0 8px auto; padding: 4px; border: 0; background: none; font: inherit; cursor: pointer; }
-  .soon { color: #555; }
-</style>
+<link rel="alternate" type="application/atom+xml" title="9oSTUDIO" href="feed.xml">
+<link rel="stylesheet" href="style.css?v=cee64966">
 </head>
 <body>
+<div class="page">
+<header class="top">
+  <div class="brand">
+    <h1><a href="./">9oSTUDIO</a></h1>
+    <p class="tagline">9oと申します。 ASMとCプログラマー</p>
+  </div>
+</header>
+<div class="layout with-side">
 <main>
-  <h1 lang="ja">9oと申します。 ASMとCプログラマー</h1>
-  <section>
-    <nav class="social" aria-label="Social">
-      <a href="https://x.com/9ostudio" title="X" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg></a>
-      <a href="https://www.patreon.com/9ostudio" title="Patreon" aria-label="Patreon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22.957 7.21c-.004-3.064-2.391-5.576-5.191-6.482-3.478-1.125-8.064-.962-11.384.604C2.357 3.231 1.093 7.391 1.046 11.54c-.039 3.411.302 12.396 5.369 12.46 3.765.047 4.326-4.804 6.068-7.141 1.24-1.662 2.836-2.132 4.801-2.618 3.376-.836 5.678-3.501 5.673-7.031Z"/></svg></a>
-      <a href="https://github.com/9ostudio" title="GitHub" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
-      <a href="https://discord.gg/deUcJc8C73" title="Discord" aria-label="Discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></a>
-    </nav>
-  </section>
-  <section>
-    <div class="consoles" role="group" aria-label="Consoles">
-      <button type="button" data-console="gb" aria-pressed="false">GB</button>
-      <button type="button" data-console="gbc" aria-pressed="false">GBC</button>
-      <button type="button" data-console="gba" aria-pressed="false">GBA</button>
-      <button type="button" data-console="nes" aria-pressed="false">NES</button>
-      <button type="button" data-console="snes" aria-pressed="false">SNES</button>
-      <button type="button" data-console="n64" aria-pressed="false">N64</button>
-      <button type="button" data-console="pm" aria-pressed="false">PM</button>
-    </div>
-    <div class="games">
-      <ul id="list-gb" aria-label="GB games" hidden>
-        <li class="soon">Nothing yet</li>
-      </ul>
-      <ul id="list-gbc" aria-label="GBC games" hidden>
-        <li class="soon">Nothing yet</li>
-      </ul>
-      <ul id="list-gba" aria-label="GBA games" hidden>
-        <li class="soon">Nothing yet</li>
-      </ul>
-      <ul id="list-nes" aria-label="NES games" hidden>
-        <li class="soon">Nothing yet</li>
-      </ul>
-      <ul id="list-snes" aria-label="SNES games" hidden>
-        <li class="soon">Nothing yet</li>
-      </ul>
-      <ul id="list-n64" aria-label="N64 games" hidden>
-        <li class="soon">Nothing yet</li>
-      </ul>
-      <ul id="list-pm" aria-label="PM games" hidden>
-        <li class="soon">Nothing yet</li>
-      </ul>
-    </div>
-  </section>
+<nav class="tabs" aria-label="Sections">
+  <a href="#games" data-tab="games">ゲーム <small>Games</small></a>
+  <a href="#music" data-tab="music">音楽 <small>Music</small></a>
+  <a href="#art" data-tab="art">アート <small>Art</small></a>
+  <a href="#videos" data-tab="videos">動画 <small>Videos</small></a>
+</nav>
+<section class="panel" id="games" data-tab="games">
+<h2>ゲーム <small>Games</small></h2>
+<section class="console" id="gb">
+<h3>ゲームボーイ <span class="code">GB</span></h3>
+<p class="soon">準備中 <small>Coming soon</small></p>
+</section>
+<section class="console" id="gbc">
+<h3>ゲームボーイカラー <span class="code">GBC</span></h3>
+<p class="soon">準備中 <small>Coming soon</small></p>
+</section>
+<section class="console" id="gba">
+<h3>ゲームボーイアドバンス <span class="code">GBA</span></h3>
+<p class="soon">準備中 <small>Coming soon</small></p>
+</section>
+<section class="console" id="nes">
+<h3>ファミコン <span class="code">NES</span></h3>
+<p class="soon">準備中 <small>Coming soon</small></p>
+</section>
+<section class="console" id="snes">
+<h3>スーパーファミコン <span class="code">SNES</span></h3>
+<p class="soon">準備中 <small>Coming soon</small></p>
+</section>
+<section class="console" id="n64">
+<h3>NINTENDO64 <span class="code">N64</span></h3>
+<p class="soon">準備中 <small>Coming soon</small></p>
+</section>
+<section class="console" id="pm">
+<h3>ポケモンミニ <span class="code">PM</span></h3>
+<p class="soon">準備中 <small>Coming soon</small></p>
+</section>
+</section>
+<section class="panel" id="music" data-tab="music">
+<h2>音楽 <small>Music</small></h2>
+<p class="soon">準備中 <small>Coming soon</small></p>
+</section>
+<section class="panel" id="art" data-tab="art">
+<h2>アート <small>Art</small></h2>
+<p class="soon">準備中 <small>Coming soon</small></p>
+</section>
+<section class="panel" id="videos" data-tab="videos">
+<h2>動画 <small>Videos</small></h2>
+<p class="soon">準備中 <small>Coming soon</small></p>
+</section>
 </main>
-<footer>© 2026 9ostudio</footer>
-<dialog id="player">
-  <button type="button" class="close">Close</button>
-  <img class="full" alt="">
-  <iframe allow="autoplay; encrypted-media; picture-in-picture; web-share; gamepad" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<aside class="side">
+<section class="box">
+<h2>フィード <small>Feeds</small> <a class="rss" href="feed.xml">RSS</a></h2>
+<p class="soon">準備中 <small>Coming soon</small></p>
+</section>
+<section class="box">
+<h2>支援 <small>Support</small></h2>
+<p class="soon">まだ利用できません <small>Not available yet</small></p>
+</section>
+</aside>
+</div>
+<footer class="bottom">最終更新 <small>Updated</small> 2026.10.28 · © 2026 9ostudio · since 2026</footer>
+</div>
+
+<dialog class="sheet" id="viewer" aria-label="Viewer">
+<div class="sheet-body" tabindex="-1" autofocus>
+<button class="close" type="button" data-close aria-label="閉じる (Close)">✕</button>
+<h2 class="sheet-title" data-title></h2>
+<p class="meta" data-note></p>
+<div class="view" data-view></div>
+</div>
 </dialog>
 <script>
-  const buttons = document.querySelectorAll('[data-console]');
-  function show(name) {
-    for (const b of buttons) {
-      const on = b.dataset.console === name;
-      b.setAttribute('aria-pressed', on);
-      document.getElementById('list-' + b.dataset.console).hidden = !on;
+  document.documentElement.classList.add('js');
+  var tabs = document.querySelectorAll('.tabs a');
+  var panels = document.querySelectorAll('.panel');
+  var viewer = document.getElementById('viewer');
+
+  function show(tab) {
+    panels.forEach(function (p) { p.hidden = p.dataset.tab !== tab; });
+    tabs.forEach(function (a) { a.classList.toggle('on', a.dataset.tab === tab); });
+  }
+
+  function stop(sheet) {
+    sheet.querySelectorAll('iframe').forEach(function (frame) { frame.src = 'about:blank'; });
+  }
+
+  function open(sheet) {
+    sheet.querySelectorAll('iframe[data-src]').forEach(function (frame) { frame.src = frame.dataset.src; });
+    sheet.showModal();
+  }
+
+  function game(id) {
+    var sheet = document.getElementById('game-' + id);
+    if (!sheet) return false;
+    show('games');
+    open(sheet);
+    history.replaceState(null, '', '#' + id);
+    return true;
+  }
+
+  function view(card) {
+    var box = viewer.querySelector('[data-view]');
+    box.textContent = '';
+    viewer.querySelector('[data-title]').textContent = card.dataset.title;
+    viewer.querySelector('[data-note]').textContent = card.dataset.note || '';
+    if (card.dataset.view === 'image') {
+      var image = document.createElement('img');
+      image.src = card.dataset.src;
+      image.alt = card.dataset.title;
+      box.appendChild(image);
+      box.className = 'view picture';
+    } else {
+      var frame = document.createElement('iframe');
+      frame.dataset.src = 'https://www.youtube-nocookie.com/embed/' + card.dataset.video + '?autoplay=1';
+      frame.title = card.dataset.title;
+      frame.allow = 'autoplay; fullscreen; picture-in-picture';
+      frame.allowFullscreen = true;
+      box.appendChild(frame);
+      box.className = 'view video';
+    }
+    open(viewer);
+  }
+
+  function route() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    var target = id && document.getElementById(id);
+    if (id && game(id)) return;
+    if (target && target.classList.contains('panel')) return show(id);
+    if (target && target.closest('.panel')) {
+      show(target.closest('.panel').dataset.tab);
+      target.scrollIntoView();
     }
   }
-  for (const b of buttons) {
-    b.addEventListener('click', () => {
-      show(b.dataset.console);
-      history.replaceState(null, '', '#' + b.dataset.console);
+
+  tabs.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      history.replaceState(null, '', a.getAttribute('href'));
+      show(a.dataset.tab);
     });
-  }
-  show(location.hash.slice(1));
-  const player = document.getElementById('player');
-  const frame = player.querySelector('iframe');
-  const picture = player.querySelector('.full');
-  for (const t of document.querySelectorAll('[data-video], [data-play], [data-image]')) {
-    t.addEventListener('click', () => {
-      const mode = 'image' in t.dataset ? 'image' : 'play' in t.dataset ? 'game' : 'video';
-      player.dataset.mode = mode;
-      player.style.setProperty('--ratio', t.dataset.ratio || '1.143');
-      if (mode === 'image') {
-        picture.src = t.dataset.image;
-        picture.alt = t.getAttribute('aria-label');
-      } else {
-        frame.title = t.getAttribute('aria-label');
-        frame.src = mode === 'game' ? t.dataset.play : 'https://www.youtube-nocookie.com/embed/' + t.dataset.video + '?autoplay=1';
-      }
-      player.showModal();
-      if (mode === 'game') frame.addEventListener('load', () => frame.contentWindow.focus(), { once: true });
-    });
-  }
-  player.addEventListener('click', () => player.close());
-  player.addEventListener('close', () => {
-    frame.src = 'about:blank';
-    picture.removeAttribute('src');
   });
+  document.querySelectorAll('[data-game]').forEach(function (card) {
+    card.addEventListener('click', function () { game(card.dataset.game); });
+  });
+  document.querySelectorAll('button[data-view]').forEach(function (card) {
+    card.addEventListener('click', function () { view(card); });
+  });
+  document.querySelectorAll('dialog.sheet').forEach(function (sheet) {
+    sheet.addEventListener('click', function (e) {
+      if (e.target === sheet || e.target.hasAttribute('data-close')) sheet.close();
+    });
+    sheet.addEventListener('close', function () {
+      stop(sheet);
+      if (sheet.id.indexOf('game-') === 0) history.replaceState(null, '', '#games');
+    });
+  });
+  window.addEventListener('hashchange', route);
+  show('games');
+  route();
 </script>
 </body>
 </html>

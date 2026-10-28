@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+<title>9oSTUDIO</title>
+<link href="https://9o.studio/"/>
+<link rel="self" href="https://9o.studio/feed.xml"/>
+<id>https://9o.studio/</id>
+<updated>2026-10-28T00:50:03Z</updated>
+<author><name>9ostudio</name></author>
+</feed>
