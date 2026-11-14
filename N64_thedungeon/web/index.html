@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Dungeon</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #000; color: #aaa; font: 14px sans-serif; }
+  p { margin: 0; padding: 16px; }
+</style>
+</head>
+<body>
+<script>
+  fetch('../game.json?' + Date.now(), { cache: 'no-store' }).then(function (response) {
+    if (!response.ok) throw new Error(response.status);
+    return response.json();
+  }).then(function (game) {
+    location.replace(encodeURIComponent(game.tag) + '/' + location.search + location.hash);
+  }).catch(function () {
+    var line = document.createElement('p');
+    line.textContent = '読み込めませんでした / Could not load the game';
+    document.body.appendChild(line);
+  });
+</script>
+</body>
+</html>

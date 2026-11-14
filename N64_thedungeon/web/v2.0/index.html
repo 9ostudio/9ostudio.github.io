@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>読み込み中</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" crossorigin>
+<style>
+html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+html { font-family: "DotGothic16", "MS PGothic", "ＭＳ Ｐゴシック", Osaka, monospace; }
+body { touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+canvas { display: block; outline: none; }
+#notice { position: fixed; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; text-align: center; background: #000; color: #777; font: 12px/1.8 "DotGothic16", "MS PGothic", "ＭＳ Ｐゴシック", Osaka, monospace; letter-spacing: .08em; -webkit-font-smoothing: none; }
+#stats { position: fixed; top: env(safe-area-inset-top); left: 50%; transform: translateX(-50%); z-index: 3; padding: 2px 8px; background: rgba(0, 0, 0, .6); color: #fff; font: 12px monospace; white-space: nowrap; pointer-events: none; }
+#pad { position: fixed; inset: 0; pointer-events: none; display: none; z-index: 1; }
+#pad.on { display: block; }
+#pad > div { position: absolute; pointer-events: auto; touch-action: none; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255, 255, 255, .4); background: rgba(255, 255, 255, .1); color: rgba(255, 255, 255, .75); font: 600 15px system-ui, sans-serif; }
+#pad > div.down { background: rgba(255, 255, 255, .35); }
+#pad .round { width: var(--btn); height: var(--btn); border-radius: 50%; }
+#pad .pill { width: 74px; height: 30px; border-radius: 15px; font-size: 11px; letter-spacing: .06em; }
+#pad { --btn: 64px; --step: 74px; --vstep: 68px; --dpad: 150px; --tx: 80px; --ty: 48px; --lift: 0px;
+       --sl: env(safe-area-inset-left); --sr: env(safe-area-inset-right); --st: env(safe-area-inset-top);
+       --sb: calc(env(safe-area-inset-bottom) + var(--lift)); }
+@media (max-width: 440px), (max-height: 440px) {
+  #pad { --btn: 56px; --step: 62px; --vstep: 58px; --dpad: 132px; --tx: 70px; --ty: 42px; }
+}
+#pad .dpad { left: calc(18px + var(--sl)); bottom: calc(28px + var(--sb)); width: var(--dpad); height: var(--dpad); border-radius: 50%; }
+#pad .dpad::before, #pad .dpad::after { content: ""; position: absolute; background: rgba(255, 255, 255, .3); border-radius: 4px; }
+#pad .dpad::before { width: calc(var(--dpad) * .29); height: calc(var(--dpad) * .8); }
+#pad .dpad::after { width: calc(var(--dpad) * .8); height: calc(var(--dpad) * .29); }
+#pad .a { right: calc(18px + var(--sr)); bottom: calc(28px + var(--vstep) + var(--sb)); }
+#pad .b { right: calc(18px + var(--step) + var(--sr)); bottom: calc(28px + var(--sb)); }
+#pad .x { right: calc(18px + var(--step) + var(--sr)); bottom: calc(28px + 2 * var(--vstep) + var(--sb)); }
+#pad .y { right: calc(18px + 2 * var(--step) + var(--sr)); bottom: calc(28px + var(--vstep) + var(--sb)); }
+#pad.two .a { right: calc(18px + var(--sr)); bottom: calc(44px + var(--ty) + var(--sb)); }
+#pad.two .b { right: calc(18px + var(--tx) + var(--sr)); bottom: calc(44px + var(--sb)); }
+#pad .l { left: calc(18px + var(--sl)); top: calc(18px + var(--st)); }
+#pad .r { right: calc(18px + var(--sr)); top: calc(18px + var(--st)); }
+#pad .full { left: calc(18px + var(--sl)); top: calc(60px + var(--st)); }
+#pad .select { left: calc(18px + var(--dpad) / 2 - 37px + var(--sl)); bottom: calc(46px + var(--dpad) + var(--sb)); }
+#pad .start { right: calc(18px + var(--step) + var(--btn) / 2 - 37px + var(--sr)); bottom: calc(44px + 2 * var(--vstep) + var(--btn) + var(--sb)); }
+#pad.two .start { right: calc(18px + (var(--tx) + var(--btn)) / 2 - 37px + var(--sr)); bottom: calc(60px + var(--ty) + var(--btn) + var(--sb)); }
+@media (orientation: portrait) {
+  #pad { --lift: 48px; }
+  #pad .select { left: calc(50% - 84px); bottom: calc(14px + env(safe-area-inset-bottom)); }
+  #pad .start, #pad.two .start { left: calc(50% + 10px); right: auto; bottom: calc(14px + env(safe-area-inset-bottom)); }
+  #pad .l, #pad .r, #pad .full { top: auto; bottom: calc(40px + 2 * var(--vstep) + var(--btn) + var(--sb)); }
+  #pad.two .l, #pad.two .r, #pad.two .full { bottom: calc(46px + var(--dpad) + var(--sb)); }
+  #pad .full { left: calc(50% - 37px); }
+}
+#pad.n64 { --c: 46px; --b2: 52px; }
+@media (max-width: 440px), (max-height: 440px) {
+  #pad.n64 { --c: 44px; --b2: 48px; }
+}
+#pad .stick { left: calc(18px + var(--sl)); bottom: calc(28px + var(--sb)); width: var(--dpad); height: var(--dpad); border-radius: 50%; }
+#pad .stick::before { content: ""; position: absolute; inset: 9%; background: rgba(255, 255, 255, .12); clip-path: polygon(29% 0, 71% 0, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0 71%, 0 29%); }
+#pad .knob { position: absolute; width: 40%; height: 40%; border-radius: 50%; background: rgba(255, 255, 255, .45); pointer-events: none; }
+#pad.n64 .a { right: calc(18px + var(--c) + var(--sr)); bottom: calc(28px + var(--sb)); }
+#pad.n64 .b { right: calc(22px + var(--c) + var(--btn) + var(--sr)); bottom: calc(28px + var(--btn) * .55 + var(--sb)); width: var(--b2); height: var(--b2); }
+#pad.n64 .c { width: var(--c); height: var(--c); font-size: 13px; }
+#pad.n64 .cup { right: calc(18px + var(--c) + var(--sr)); bottom: calc(34px + var(--btn) + 2 * var(--c) + var(--sb)); }
+#pad.n64 .cdown { right: calc(18px + var(--c) + var(--sr)); bottom: calc(34px + var(--btn) + var(--sb)); }
+#pad.n64 .cleft { right: calc(18px + 2 * var(--c) + var(--sr)); bottom: calc(34px + var(--btn) + var(--c) + var(--sb)); }
+#pad.n64 .cright { right: calc(18px + var(--sr)); bottom: calc(34px + var(--btn) + var(--c) + var(--sb)); }
+#pad.n64 .z { left: calc(18px + (var(--dpad) - var(--btn)) / 2 + var(--sl)); bottom: calc(38px + var(--dpad) + var(--sb)); }
+#pad.n64 .start { right: calc(18px + var(--sr)); bottom: auto; top: calc(60px + var(--st)); }
+@media (orientation: portrait) {
+  #pad.n64 .start { left: calc(50% - 37px); right: auto; top: auto; bottom: calc(14px + env(safe-area-inset-bottom)); }
+  #pad.n64 .l, #pad.n64 .r, #pad.n64 .full { top: auto; bottom: calc(max(46px + var(--btn) + 3 * var(--c), 48px + var(--dpad) + var(--btn)) + var(--sb)); }
+}
+</style>
+</head>
+<body>
+<canvas id="canvas" tabindex="-1" oncontextmenu="event.preventDefault()"></canvas>
+<div id="pad"></div>
+<div id="notice">読み込み中…</div>
+<script>
+var english = (function () { try { return localStorage.getItem('lang') === 'en'; } catch (e) { return false; } })();
+var say = english
+  ? { stopped: 'The game stopped', start: 'The game could not start: try a newer browser', load: 'The game could not load', loading: 'Loading…', why: function (x) { return 'The game could not load (' + x + ')'; } }
+  : { stopped: 'ゲームが止まりました', start: 'ゲームを開始できません。新しいブラウザでお試しください', load: 'ゲームを読み込めません', loading: '読み込み中…', why: function (x) { return 'ゲームを読み込めません（' + x + '）'; } };
+if (english) { document.documentElement.lang = 'en'; document.title = 'Loading'; document.getElementById('notice').textContent = say.loading; }
+
+var ids = { b: 0, y: 1, select: 2, start: 3, up: 4, down: 5, left: 6, right: 7, a: 8, x: 9, l: 10, r: 11, z: 12 };
+var canvas = document.getElementById('canvas');
+var notice = document.getElementById('notice');
+var pad = document.getElementById('pad');
+var conf = {};
+var started = false;
+var stopped = false;
+var threads = 1;
+var cfgText = '';
+var readout = null;
+
+function note(name, value) {
+  var key = name + ' ' + location.pathname;
+  try {
+    if (value === undefined) return sessionStorage.getItem(key) === '1';
+    if (value) sessionStorage.setItem(key, '1');
+    else sessionStorage.removeItem(key);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function isolated() {
+  return !!window.crossOriginIsolated && typeof SharedArrayBuffer !== 'undefined';
+}
+
+function wanted() {
+  var spec = (conf.threads || '').split(/\s+/), most = parseInt(spec[1], 10) || 1, asked = /[?&]threads=(\d+)/.exec(location.search), cores = navigator.hardwareConcurrency || 1, n;
+  if (!spec[0] || most < 2 || note('plain')) return 1;
+  if (asked) n = parseInt(asked[1], 10);
+  else if (window.matchMedia('(pointer: coarse)').matches) n = cores < 2 ? 1 : 2;
+  else if (cores < 4) n = 1;
+  else n = Math.floor(cores / 2);
+  return Math.max(1, Math.min(most, n));
+}
+
+function isolate() {
+  var sw = navigator.serviceWorker;
+  if (isolated() || window.top !== window || !window.isSecureContext || !sw || note('isolate')) return Promise.resolve(false);
+  return sw.register('isolate.js').then(function (registration) {
+    return new Promise(function (done) {
+      var worker = registration.active || registration.waiting || registration.installing;
+      function check() {
+        if (worker.state === 'activated') done(true);
+        else if (worker.state === 'redundant') done(false);
+      }
+      if (!worker) return done(false);
+      worker.addEventListener('statechange', check);
+      setTimeout(function () { done(false); }, 5000);
+      check();
+    });
+  }).then(function (ready) {
+    if (!ready || !note('isolate', true)) return false;
+    location.reload();
+    return true;
+  }, function () {
+    return false;
+  });
+}
+
+function plain() {
+  if (started || stopped || threads < 2 || !note('plain', true)) return false;
+  stopped = true;
+  location.reload();
+  return true;
+}
+
+function press(id, down) {
+  if (started) Module._player_touch(id, down ? 1 : 0);
+}
+
+function failed(message) {
+  if (stopped) return;
+  stopped = true;
+  document.body.appendChild(notice);
+  notice.textContent = message;
+}
+
+function crashed() {
+  if (!plain()) failed(started ? say.stopped : say.start);
+}
+
+function flush() {
+  if (started && !stopped && Module._player_flush) Module._player_flush();
+}
+
+function dpad(el) {
+  var owner = null, held = {};
+  function set(dirs) {
+    ['up', 'down', 'left', 'right'].forEach(function (d) {
+      var on = dirs.indexOf(d) >= 0;
+      if (!!held[d] !== on) {
+        held[d] = on;
+        press(ids[d], on);
+      }
+    });
+  }
+  function move(e) {
+    var r = el.getBoundingClientRect(), x = e.clientX - r.left - r.width / 2, y = e.clientY - r.top - r.height / 2, dirs = [];
+    if (Math.hypot(x, y) > r.width * 0.12) {
+      var a = Math.atan2(y, x) * 180 / Math.PI;
+      if (a > -157.5 && a < -22.5) dirs.push('up');
+      if (a > 22.5 && a < 157.5) dirs.push('down');
+      if (a > 112.5 || a < -112.5) dirs.push('left');
+      if (a > -67.5 && a < 67.5) dirs.push('right');
+    }
+    el.classList.toggle('down', dirs.length > 0);
+    set(dirs);
+  }
+  el.addEventListener('pointerdown', function (e) {
+    e.preventDefault();
+    owner = e.pointerId;
+    el.setPointerCapture(e.pointerId);
+    move(e);
+  });
+  el.addEventListener('pointermove', function (e) {
+    if (e.pointerId === owner) move(e);
+  });
+  ['pointerup', 'pointercancel'].forEach(function (type) {
+    el.addEventListener(type, function (e) {
+      if (e.pointerId !== owner) return;
+      owner = null;
+      el.classList.remove('down');
+      set([]);
+    });
+  });
+}
+
+function stick(el) {
+  var owner = null, knob = document.createElement('div');
+  knob.className = 'knob';
+  el.appendChild(knob);
+  function set(x, y) {
+    knob.style.transform = 'translate(' + x * 75 + '%, ' + y * 75 + '%)';
+    if (started) Module._player_touch_stick(0, Math.round(x * 32767), Math.round(y * 32767));
+  }
+  function move(e) {
+    var r = el.getBoundingClientRect(), reach = r.width * 0.4, x = (e.clientX - r.left - r.width / 2) / reach, y = (e.clientY - r.top - r.height / 2) / reach, d = Math.hypot(x, y);
+    set(d > 1 ? x / d : x, d > 1 ? y / d : y);
+  }
+  el.addEventListener('pointerdown', function (e) {
+    e.preventDefault();
+    owner = e.pointerId;
+    el.setPointerCapture(e.pointerId);
+    el.classList.add('down');
+    move(e);
+  });
+  el.addEventListener('pointermove', function (e) {
+    if (e.pointerId === owner) move(e);
+  });
+  ['pointerup', 'pointercancel'].forEach(function (type) {
+    el.addEventListener(type, function (e) {
+      if (e.pointerId !== owner) return;
+      owner = null;
+      el.classList.remove('down');
+      set(0, 0);
+    });
+  });
+}
+
+function button(el, act) {
+  el.addEventListener('pointerdown', function (e) {
+    e.preventDefault();
+    el.setPointerCapture(e.pointerId);
+    el.classList.add('down');
+    act(true);
+  });
+  ['pointerup', 'pointercancel'].forEach(function (type) {
+    el.addEventListener(type, function () {
+      el.classList.remove('down');
+      act(false);
+    });
+  });
+}
+
+function cButtons() {
+  var held = {};
+  [['cup', '\u25B2'], ['cdown', '\u25BC'], ['cleft', '\u25C0\uFE0E'], ['cright', '\u25B6\uFE0E']].forEach(function (c) {
+    var el = document.createElement('div');
+    el.className = 'round c ' + c[0];
+    el.textContent = c[1];
+    button(el, function (down) {
+      held[c[0]] = down;
+      if (started) Module._player_touch_stick(1, ((held.cright ? 1 : 0) - (held.cleft ? 1 : 0)) * 32767, ((held.cdown ? 1 : 0) - (held.cup ? 1 : 0)) * 32767);
+    });
+    pad.appendChild(el);
+  });
+}
+
+function buildPad(names) {
+  var keys = [];
+  names.forEach(function (entry) {
+    var el = document.createElement('div'), parts = entry.split(':'), n = parts[0], slot = parts[2] || n;
+    keys.push(slot);
+    if (n === 'dpad') {
+      el.className = 'dpad';
+      dpad(el);
+    } else if (n === 'stick') {
+      el.className = 'stick';
+      stick(el);
+    } else if (n === 'c') {
+      cButtons();
+      return;
+    } else if (ids[n] !== undefined && ids[slot] !== undefined) {
+      el.className = (['l', 'r', 'select', 'start'].indexOf(slot) >= 0 ? 'pill ' : 'round ') + slot;
+      el.textContent = parts[1] || n.toUpperCase();
+      button(el, function (down) { press(ids[n], down); });
+    } else {
+      return;
+    }
+    pad.appendChild(el);
+  });
+  if (keys.indexOf('stick') >= 0) pad.classList.add('n64');
+  else if (keys.indexOf('x') < 0) pad.classList.add('two');
+  if (document.fullscreenEnabled) {
+    var full = document.createElement('div');
+    full.className = 'pill full';
+    full.textContent = 'FULL';
+    full.addEventListener('pointerup', function (e) {
+      e.preventDefault();
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen();
+    });
+    pad.appendChild(full);
+  }
+  if (window.matchMedia('(pointer: coarse)').matches) pad.classList.add('on');
+  window.addEventListener('touchstart', function () { pad.classList.add('on'); layout(); }, { once: true, passive: true });
+}
+
+function layout() {
+  var w = innerWidth, h = innerHeight, left = 0, right = 0, bottom = 0;
+  if (!started || !Module._player_insets) return;
+  if (pad.classList.contains('on')) {
+    Array.prototype.forEach.call(pad.children, function (el) {
+      var r = el.getBoundingClientRect();
+      if (!r.width) return;
+      if (w > h) {
+        if (r.left + r.width / 2 < w / 2) left = Math.max(left, r.right + 8);
+        else right = Math.max(right, w - r.left + 8);
+      } else {
+        bottom = Math.max(bottom, h - r.top + 8);
+      }
+    });
+  }
+  Module._player_insets(Math.ceil(left), 0, Math.ceil(right), Math.ceil(bottom));
+}
+
+window.addEventListener('resize', layout);
+window.addEventListener('pagehide', flush);
+document.addEventListener('visibilitychange', function () {
+  if (document.hidden) flush();
+});
+window.addEventListener('error', function (e) {
+  if (e.error instanceof WebAssembly.RuntimeError || (e.filename && e.filename.indexOf(location.origin) === 0)) crashed();
+});
+
+function fetchOk(url) {
+  return fetch(url).then(function (r) {
+    if (!r.ok) throw new Error(url + ': ' + r.status);
+    return r;
+  });
+}
+
+function load(name) {
+  var script = document.createElement('script');
+  script.src = name;
+  script.async = true;
+  script.onerror = function () {
+    if (!plain()) failed(say.why(name));
+  };
+  document.body.appendChild(script);
+}
+
+function stats() {
+  var last = 0, then = performance.now();
+  readout = document.createElement('div');
+  readout.id = 'stats';
+  document.body.appendChild(readout);
+  setInterval(function () {
+    var frames = started && !stopped ? Module._player_frames() : 0, now = performance.now();
+    readout.textContent = (started && !stopped ? Module._player_core_ms().toFixed(1) + ' ms  ' + Math.round((frames - last) * 1000 / (now - then)) + ' fps  ' : '') +
+      (threads > 1 ? threads + ' threads' : !conf.threads || isolated() ? '1 thread' : '1 thread, page not isolated') +
+      (started && !stopped ? '  sound ' + Math.round(Module._player_audio_ms()) + ' ms, ' + Module._player_audio_dry() + ' gaps' : '');
+    last = frames;
+    then = now;
+  }, 1000);
+}
+
+var game = fetchOk('game.cfg').then(function (r) { return r.text(); }).then(function (text) {
+  text.split('\n').forEach(function (line) {
+    var i = line.indexOf('=');
+    if (i > 0) conf[line.slice(0, i).trim()] = line.slice(i + 1).trim();
+  });
+  if (conf.title) document.title = conf.title;
+  cfgText = text;
+  return wanted() > 1 && isolate();
+}).then(function (reloading) {
+  if (reloading) return new Promise(function () {});
+  if (isolated()) {
+    note('isolate', false);
+    threads = wanted();
+  }
+  if (threads > 1) cfgText += '\n' + conf.threads.split(/\s+/)[0] + '=' + threads + '\n';
+  if (/[?&]stats\b/.test(location.search)) stats();
+  load(threads > 1 ? 'player-threads.js' : 'player.js');
+  return fetchOk(conf.rom).then(function (r) { return r.arrayBuffer(); });
+});
+game.catch(function (e) {
+  failed(say.why(e.message));
+});
+
+var Module = {
+  canvas: canvas,
+  noInitialRun: true,
+  preRun: [function () {
+    var FS = Module.FS;
+    Module.addRunDependency('game');
+    game.then(function (data) {
+      FS.writeFile('/game.cfg', cfgText);
+      FS.writeFile('/' + conf.rom, new Uint8Array(data));
+      buildPad((conf.touch || 'dpad b a select start').split(/\s+/));
+      Module.removeRunDependency('game');
+    }, function () {});
+  }],
+  onRuntimeInitialized: function () {
+    var FS = Module.FS, dir;
+    function ready() {
+      if (stopped) return;
+      notice.remove();
+      started = true;
+      canvas.focus();
+      Module.callMain([]);
+      document.body.appendChild(pad);
+      if (readout) document.body.appendChild(readout);
+      layout();
+    }
+    if (stopped) return;
+    dir = Module.UTF8ToString(Module._player_save_dir()).replace(/\/$/, '');
+    if (!dir) return setTimeout(ready, 0);
+    FS.mkdirTree(dir);
+    FS.mount(Module.IDBFS, {}, dir);
+    FS.syncfs(true, ready);
+  },
+  onAbort: crashed
+};
+</script>
+</body>
+</html>

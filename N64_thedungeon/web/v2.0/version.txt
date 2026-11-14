@@ -1,0 +1,4 @@
+player 18
+core parallel_n64 libretro/parallel-n64 60b5d4357a1787724fd668f9052fbb4444181ee1
+sdl 3.4.20
+built docker.io/emscripten/emsdk:7.0.0

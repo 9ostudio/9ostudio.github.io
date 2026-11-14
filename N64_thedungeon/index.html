@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
+<title>The Dungeon - 9oSTUDIO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" crossorigin>
+<link rel="stylesheet" href="/site.css">
+</head>
+<body class="play">
+<header class="bar-top"><a class="back" id="back" href="/#works" data-t="back">戻る</a><h1>The Dungeon</h1></header>
+<iframe title="The Dungeon" allow="autoplay; fullscreen; gamepad" allowfullscreen></iframe>
+<script src="/site.js"></script>
+<script>
+  const frame = document.querySelector('iframe');
+  const path = location.pathname;
+  const kept = name => {
+    try {
+      return sessionStorage.getItem(name + ' ' + path);
+    } catch (e) {
+      return null;
+    }
+  };
+  const keep = (name, value) => {
+    try {
+      if (value === null) sessionStorage.removeItem(name + ' ' + path);
+      else sessionStorage.setItem(name + ' ' + path, value);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  };
+  const reloaded = (performance.getEntriesByType('navigation')[0] || {}).type === 'reload';
+  const from = reloaded && kept('from') !== null ? kept('from') : document.referrer;
+  if (!reloaded) keep('from', null);
+  Site.back(document.getElementById('back'), '/#works', from);
+  frame.addEventListener('load', () => frame.focus());
+  const show = () => { frame.src = 'web/' + location.search; };
+  if (window.crossOriginIsolated) keep('isolate', null);
+  if (!true || window.crossOriginIsolated || !window.isSecureContext || !navigator.serviceWorker || window.top !== window || kept('isolate') !== null) {
+    show();
+  } else {
+    navigator.serviceWorker.register('isolate.js').then(registration => new Promise(done => {
+      const worker = registration.active || registration.waiting || registration.installing;
+      const check = () => {
+        if (worker.state === 'activated') done(true);
+        else if (worker.state === 'redundant') done(false);
+      };
+      if (!worker) return done(false);
+      worker.addEventListener('statechange', check);
+      setTimeout(() => done(false), 5000);
+      check();
+    })).then(ready => {
+      if (ready && keep('isolate', '1') && keep('from', document.referrer)) location.reload();
+      else show();
+    }, show);
+  }
+</script>
+</body>
+</html>
