@@ -1,0 +1,17 @@
+* { box-sizing: border-box; }
+html { background: #000; color: #a9a3a3; font: 12px/1.8 "DotGothic16", "MS PGothic", "ＭＳ Ｐゴシック", Osaka, monospace;
+  -webkit-font-smoothing: none; }
+a { color: inherit; text-decoration: none; }
+a:focus-visible { outline: 1px dotted #fff; outline-offset: 3px; }
+::selection { background: #a9a3a3; color: #000; }
+
+body.home { margin: 0; min-height: 100vh; min-height: 100svh; padding: 40px 16px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 14px; text-align: center; }
+body.home h1 { margin: 0; font-size: 12px; font-weight: normal; color: #fff; letter-spacing: 0.08em; }
+body.home > nav { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px; }
+body.home > nav a { display: block; }
+body.home > nav svg { display: block; width: 16px; height: 16px; fill: currentColor; }
+
+@media (hover: hover) {
+  a:hover { color: #fff; }
+}
