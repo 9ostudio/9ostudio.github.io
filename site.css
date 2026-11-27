@@ -1,0 +1,21 @@
+* { box-sizing: border-box; }
+html { background: #000; color: #a9a3a3; font: 12px/1.8 "DotGothic16", "MS PGothic", "ＭＳ Ｐゴシック", Osaka, monospace;
+  -webkit-font-smoothing: none; scrollbar-width: none; }
+html::-webkit-scrollbar { display: none; }
+a { color: inherit; text-decoration: none; }
+a { -webkit-tap-highlight-color: transparent; }
+a:focus-visible { outline: 1px dotted #fff; outline-offset: 3px; }
+::selection { background: #a9a3a3; color: #000; }
+
+body.home { margin: 0; min-height: 100vh; min-height: 100svh; padding: 40px 16px; display: grid; place-items: center; }
+.view { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+.avatar { display: block; width: 120px; height: 120px; border-radius: 50%; image-rendering: pixelated; }
+h1 { margin: 0; font: 16px/1.6 "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans CJK JP", "Noto Sans JP", Meiryo, "Yu Gothic",
+  sans-serif; color: #fff; letter-spacing: 0.08em; -webkit-font-smoothing: antialiased; }
+nav { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px; }
+nav a { display: block; }
+nav svg { display: block; width: 20px; height: 20px; fill: currentColor; }
+
+@media (hover: hover) {
+  a:hover { color: #fff; }
+}
